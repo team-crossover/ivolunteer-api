@@ -11,7 +11,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**");
+        registry.addMapping("/api/**")
+                .allowedMethods("*")
+                .allowedOrigins("http://localhost:4200",
+                        "https://team-crossover.github.io",
+                        "https://team-crossover.github.io/ivolunteer");
     }
 
 }
