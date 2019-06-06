@@ -3,6 +3,7 @@ package com.crossover.ivolunteer.presentation.controller;
 import com.crossover.ivolunteer.business.entity.Ong;
 import com.crossover.ivolunteer.business.service.OngService;
 import com.crossover.ivolunteer.business.service.UsuarioService;
+import com.crossover.ivolunteer.presentation.constants.ApiPaths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +22,13 @@ public class OngController {
     @Autowired
     private OngService ongService;
 
-    @GetMapping("/ongs")
+    @GetMapping(ApiPaths.V1.ONGS_PREFIX)
     private Collection<Ong> getAll() {
         // TODO: Add pagination to this
         return ongService.findAll();
     }
 
-    @GetMapping(path = "/ongs/{id}")
+    @GetMapping(ApiPaths.V1.ONGS_PREFIX + "/{id}")
     private Ong get(@PathVariable("id") long id) {
         Ong ong = ongService.findById(id);
         if (ong == null)

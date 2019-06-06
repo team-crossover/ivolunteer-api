@@ -36,5 +36,9 @@ public class ApiPaths {
         public static final String AUTH_DEAUTHENTICATE = AUTH_PREFIX + "/deauthenticate";
         public static final String AUTH_WHOAMI = AUTH_PREFIX + "/whoami";
 
+        // ONGs
+        public static final String ONGS_PREFIX = PUBLIC_PREFIX + "/ongs";
+        public static final String VOLUNTARIOS_PREFIX = PUBLIC_PREFIX + "/voluntarios";
+
     }
 }

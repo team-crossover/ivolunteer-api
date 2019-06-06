@@ -3,6 +3,7 @@ package com.crossover.ivolunteer.presentation.controller;
 import com.crossover.ivolunteer.business.entity.Voluntario;
 import com.crossover.ivolunteer.business.service.UsuarioService;
 import com.crossover.ivolunteer.business.service.VoluntarioService;
+import com.crossover.ivolunteer.presentation.constants.ApiPaths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +22,13 @@ public class VoluntarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping("/voluntarios")
+    @GetMapping(ApiPaths.V1.VOLUNTARIOS_PREFIX)
     private Collection<Voluntario> getAll() {
         // TODO: Add pagination to this
         return voluntarioService.findAll();
     }
 
-    @GetMapping(path = "/voluntarios/{id}")
+    @GetMapping(ApiPaths.V1.VOLUNTARIOS_PREFIX + "/{id}")
     private Voluntario get(@PathVariable("id") long id) {
         Voluntario voluntario = voluntarioService.findById(id);
         if (voluntario == null)
