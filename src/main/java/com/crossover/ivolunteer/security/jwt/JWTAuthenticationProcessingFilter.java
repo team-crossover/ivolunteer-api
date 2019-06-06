@@ -5,11 +5,10 @@ import com.crossover.ivolunteer.business.entity.Usuario;
 import com.crossover.ivolunteer.business.service.SessaoService;
 import com.crossover.ivolunteer.business.service.UsuarioService;
 import com.crossover.ivolunteer.presentation.dto.CredenciaisDto;
-import com.crossover.ivolunteer.presentation.dto.RespostaSimplesDto;
+import com.crossover.ivolunteer.presentation.dto.UsuarioDto;
 import com.crossover.ivolunteer.security.exception.InvalidAuthenticationRequestException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -84,12 +83,9 @@ public class JWTAuthenticationProcessingFilter extends AbstractAuthenticationPro
         // Add a JWT with the created session to the response
         jwtHttpService.addSessaoToResponse(session, response);
 
-        // Announces the success
-        String path = request.getServletPath();
-        RespostaSimplesDto result = new RespostaSimplesDto(HttpStatus.OK, path);
-        result.setMessage("Authentication successful");
-        response.setStatus(HttpStatus.OK.value());
-        new ObjectMapper().writeValue(response.getWriter(), result);
+        // Returns the authenticated user
+        UsuarioDto userDto = new UsuarioDto(user);
+        new ObjectMapper().writeValue(response.getWriter(), userDto);
     }
 
     private CredenciaisDto fetchCredenciais(HttpServletRequest request) throws InvalidAuthenticationRequestException {
