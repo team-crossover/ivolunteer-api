@@ -22,7 +22,7 @@ public class UsuarioDto {
         id = usuario.getId();
         username = usuario.getUsername();
         tipo = usuario.getTipo().name();
-        idVoluntario = usuario.getOng() == null
+        idOng = usuario.getOng() == null
                 ? null : usuario.getOng().getId();
         idVoluntario = usuario.getVoluntario() == null
                 ? null : usuario.getVoluntario().getId();

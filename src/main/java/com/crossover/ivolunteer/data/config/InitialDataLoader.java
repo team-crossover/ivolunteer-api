@@ -61,7 +61,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
         Usuario usuario = new Usuario();
         usuario.setUsername("admin");
         usuario.setSenha(passwordEncoder.encode("123"));
-        usuario.setTipo(TipoUsuarioEnum.VOLUNTARIO);
+        usuario.setTipo(TipoUsuarioEnum.ADMIN);
         usuario = usuarioService.save(usuario);
     }
 
