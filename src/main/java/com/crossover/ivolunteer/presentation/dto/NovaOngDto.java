@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class NovoVoluntarioDto {
+public class NovaOngDto {
 
     @NotBlank
     private String username;
@@ -24,10 +24,23 @@ public class NovoVoluntarioDto {
     @NotBlank
     private String nome;
 
+    @NotBlank
+    private String descricao;
+
+    private String doacao;
+
+    private LocalDate dataFundacao;
+
+    private List<String> areas;
+
+    private String telefone;
+
     private String email;
 
-    private LocalDate dataNascimento;
+    private String urlFacebook;
 
-    private List<String> areasInteressadas;
+    private String urlWebsite;
+
+    private EnderecoDto endereco;
 
 }
