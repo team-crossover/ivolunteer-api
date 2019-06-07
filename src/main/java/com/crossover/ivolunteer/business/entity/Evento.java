@@ -1,6 +1,5 @@
 package com.crossover.ivolunteer.business.entity;
 
-import com.crossover.ivolunteer.business.enums.AreaEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -42,9 +41,8 @@ public class Evento {
 
     private LocalDateTime dataCriacao;
 
-    @Enumerated(EnumType.STRING)
     @ElementCollection
-    private List<AreaEnum> areas = new ArrayList<>();
+    private List<String> areas = new ArrayList<>();
 
 //    TODO: Adicionar suporte a imagens
 //    private Imagem img;

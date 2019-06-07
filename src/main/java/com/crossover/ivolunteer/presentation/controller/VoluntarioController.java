@@ -16,7 +16,7 @@ import java.util.Collection;
 @RestController
 public class VoluntarioController {
 
-    @Autowired
+@Autowired
     private VoluntarioService voluntarioService;
 
     @Autowired
@@ -35,6 +35,7 @@ public class VoluntarioController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Voluntario not found");
         return voluntario;
     }
+
 
 //    @PostMapping(path = "/voluntarios", params = {"googleIdToken"})
 //    private Voluntario save(@RequestBody Voluntario voluntario,

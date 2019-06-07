@@ -1,6 +1,5 @@
 package com.crossover.ivolunteer.business.entity;
 
-import com.crossover.ivolunteer.business.enums.AreaEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -36,9 +35,8 @@ public class Voluntario {
 
     private LocalDateTime dataCriacao;
 
-    @Enumerated(EnumType.STRING)
     @ElementCollection
-    private List<AreaEnum> areasInteressadas = new ArrayList<>();
+    private List<String> areasInteressadas = new ArrayList<>();
 
     @ManyToMany
     private List<Ong> ongsSeguidas = new ArrayList<>();

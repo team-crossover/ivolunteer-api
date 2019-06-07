@@ -1,6 +1,5 @@
 package com.crossover.ivolunteer.business.entity;
 
-import com.crossover.ivolunteer.business.enums.AreaEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -43,9 +42,8 @@ public class Ong {
 
     private LocalDateTime dataCriacao;
 
-    @Enumerated(EnumType.STRING)
     @ElementCollection
-    private List<AreaEnum> areas = new ArrayList<>();
+    private List<String> areas = new ArrayList<>();
 
     @Size(max = 50)
     private String telefone;

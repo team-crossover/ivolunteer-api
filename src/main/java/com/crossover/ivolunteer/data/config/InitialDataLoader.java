@@ -4,7 +4,6 @@ import com.crossover.ivolunteer.business.entity.Endereco;
 import com.crossover.ivolunteer.business.entity.Ong;
 import com.crossover.ivolunteer.business.entity.Usuario;
 import com.crossover.ivolunteer.business.entity.Voluntario;
-import com.crossover.ivolunteer.business.enums.AreaEnum;
 import com.crossover.ivolunteer.business.enums.TipoUsuarioEnum;
 import com.crossover.ivolunteer.business.service.EnderecoService;
 import com.crossover.ivolunteer.business.service.OngService;
@@ -73,7 +72,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
         Voluntario voluntario = new Voluntario();
         voluntario.setNome("Bette Davis");
-        voluntario.setAreasInteressadas(Arrays.asList(AreaEnum.CULTURA_E_ARTE, AreaEnum.DIREITOS_HUMANOS));
+        voluntario.setAreasInteressadas(Arrays.asList("Cultura e arte", "Direitos humanos"));
         voluntario.setDataCriacao(LocalDateTime.now());
         voluntario.setDataNascimento(LocalDate.of(1908, 4, 5));
         voluntario.setEmail("bettinha@hollywood.com");
@@ -102,7 +101,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
         Ong ong = new Ong();
         ong.setNome("Clube do Gato");
         ong.setDescricao("Cuidamos de gatos perdidos, sem vida, sem rumo, possuídos etc. Não cuidamos de cachorros pois somos malignos.");
-        ong.setAreas(Arrays.asList(AreaEnum.ANIMAIS, AreaEnum.MEIO_AMBIENTE));
+        ong.setAreas(Arrays.asList("Animais", "Meio ambiente"));
         ong.setDataCriacao(LocalDateTime.now());
         ong.setDataFundacao(LocalDate.of(2005, 8, 6));
         ong.setEmail("contato@clubedogato.com");

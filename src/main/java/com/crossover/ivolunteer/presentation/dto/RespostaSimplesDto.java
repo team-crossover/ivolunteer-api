@@ -15,10 +15,10 @@ public class RespostaSimplesDto {
     private String timestamp;
     private int status;
     private String error;
-    private String message;
+    private Object message;
     private String path;
 
-    public RespostaSimplesDto(int status, String message, String path) {
+    public RespostaSimplesDto(int status, String path, Object message) {
         this.timestamp = (ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT));
         this.status = (status);
         this.error = null;
@@ -26,7 +26,7 @@ public class RespostaSimplesDto {
         this.path = (path);
     }
 
-    public RespostaSimplesDto(int status, String error, String message, String path) {
+    public RespostaSimplesDto(int status, String error, String path, Object message) {
         this.timestamp = (ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT));
         this.status = (status);
         this.error = (error);
@@ -50,7 +50,7 @@ public class RespostaSimplesDto {
         this.path = (path);
     }
 
-    public RespostaSimplesDto(HttpStatus status, String path, String message) {
+    public RespostaSimplesDto(HttpStatus status, String path, Object message) {
         this.timestamp = (ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT));
         this.status = (status.value());
         this.error = (status.getReasonPhrase());

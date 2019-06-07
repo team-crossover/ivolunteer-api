@@ -10,6 +10,8 @@ Esta sessão descreve os endpoints da API. Para ver mais sobre os objetos retorn
 
 Caso uma requisição seja inválida (p. ex. não existe, não tem autorização), será retornado um objeto RespostaSimplesDto com os dados do erro.
 
+Caso o erro seja devido a campos inválidos, a "message" do RespostaSimplesDto vai conter os campos e seus respectivos problemas.
+
 ##### Nota sobre autenticação com JWT
 
 A autenticação no sistema é feita através de JSON Web Token (JWT). 
@@ -50,6 +52,24 @@ Invalida a sessão do JWT enviado, caso ela exista.
 | Cabeçalho esperado | Authentication (contento o JWT) |
 | Corpo retornado (JSON) | UsuarioDto se tiver autenticado|
 
+### Usuários
+
+#### Criar voluntário
+
+| URL | /api/v1/public/users/create/voluntario |
+| --- | --- |
+| Tipo | POST 
+| Corpo esperado (JSON) | NovoVoluntarioDto |
+| Corpo retornado (JSON) | UsuarioDto |
+
+#### Criar ong
+
+| URL | /api/v1/public/users/create/ong |
+| --- | --- |
+| Tipo | POST 
+| Corpo esperado (JSON) | NovaOngDto |
+| Corpo retornado (JSON) | UsuarioDto |
+
 ## API Objects
 
 Esta sessão descreve os possíveis objetos retornados pela API.
@@ -76,3 +96,12 @@ Resposta genérica dada em certas situações, como erros.
 - tipo ("ADMIN", "ONG", "VOLUNTARIO")
 - idOng (se for ONG)
 - idVoluntario (se for voluntario)
+
+### NovoVoluntarioDto
+
+- username
+- senha
+- nome
+- email
+- dataNascimento
+- areasInteressadas (array)
