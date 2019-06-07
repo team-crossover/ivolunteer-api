@@ -1,6 +1,5 @@
 package com.crossover.ivolunteer.presentation.controller;
 
-import com.crossover.ivolunteer.business.entity.Sessao;
 import com.crossover.ivolunteer.business.entity.Usuario;
 import com.crossover.ivolunteer.business.entity.Voluntario;
 import com.crossover.ivolunteer.business.enums.TipoUsuarioEnum;
@@ -9,51 +8,37 @@ import com.crossover.ivolunteer.business.service.VoluntarioService;
 import com.crossover.ivolunteer.presentation.constants.ApiPaths;
 import com.crossover.ivolunteer.presentation.dto.NovoVoluntarioDto;
 import com.crossover.ivolunteer.presentation.dto.UsuarioDto;
-import com.crossover.ivolunteer.security.jwt.JWTHttpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
-/**
- * Endpoints pra manipular o voluntario autenticado.
- */
 @RestController
-public class VoluntarioController {
-
-    @Autowired
-    private UsuarioService usuarioService;
+public class VoluntariosController {
 
     @Autowired
     private VoluntarioService voluntarioService;
 
     @Autowired
-    private JWTHttpService jwtHttpService;
+    private UsuarioService usuarioService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PutMapping(ApiPaths.V1.VOLUNTARIO_PREFIX + "/update")
-    private UsuarioDto updateVoluntario(@Valid @RequestBody NovoVoluntarioDto novoVoluntarioDto, HttpServletRequest request) {
+    @PostMapping(ApiPaths.V1.VOLUNTARIOS_PREFIX)
+    private UsuarioDto createVoluntario(@Valid @RequestBody NovoVoluntarioDto novoVoluntarioDto) {
 
-        Sessao sessao = jwtHttpService.getSessaoFromRequest(request);
-        Usuario usuario = sessao == null ? null : sessao.getUsuario();
-        if (usuario == null)
-            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
+        Usuario usuario = usuarioService.findByUsername(novoVoluntarioDto.getUsername());
+        if (usuario != null)
+            throw new HttpClientErrorException(HttpStatus.CONFLICT, "Username already exists");
 
-        if (usuario.getTipo() != TipoUsuarioEnum.VOLUNTARIO)
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "User isn't voluntáro");
-
-        Voluntario antigoVoluntario = usuario.getVoluntario();
         Voluntario voluntario = Voluntario.builder()
-                .id(antigoVoluntario.getId())
                 .nome(novoVoluntarioDto.getNome())
                 .email(novoVoluntarioDto.getEmail())
                 .areasInteressadas(novoVoluntarioDto.getAreasInteressadas())
@@ -63,7 +48,6 @@ public class VoluntarioController {
         voluntario = voluntarioService.save(voluntario);
 
         usuario = Usuario.builder()
-                .id(usuario.getId())
                 .username(novoVoluntarioDto.getUsername())
                 .senha(passwordEncoder.encode(novoVoluntarioDto.getSenha()))
                 .tipo(TipoUsuarioEnum.VOLUNTARIO)
@@ -74,6 +58,22 @@ public class VoluntarioController {
         voluntario.setUsuario(usuario);
         voluntario = voluntarioService.save(voluntario);
         return new UsuarioDto(usuario);
+    }
+
+    // TODO: VoluntairoDto
+    @GetMapping(ApiPaths.V1.VOLUNTARIOS_PREFIX)
+    private Collection<Voluntario> getAll() {
+        // TODO: Add pagination to this
+        return voluntarioService.findAll();
+    }
+
+    // TODO: VoluntairoDto
+    @GetMapping(ApiPaths.V1.VOLUNTARIOS_PREFIX + "/{id}")
+    private Voluntario get(@PathVariable("id") long id) {
+        Voluntario voluntario = voluntarioService.findById(id);
+        if (voluntario == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Voluntario not found");
+        return voluntario;
     }
 
 }

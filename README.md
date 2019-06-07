@@ -52,21 +52,75 @@ Invalida a sessão do JWT enviado, caso ela exista.
 | Cabeçalho enviado | Authentication (contento o JWT) |
 | Corpo retornado (JSON) | UsuarioDto se tiver autenticado|
 
-### Usuários
+### Voluntários
 
 #### Criar voluntário
 
-| URL | /api/v1/public/users/create/voluntario |
+| URL | /api/v1/public/voluntarios |
 | --- | --- |
 | Tipo | POST 
 | Corpo enviado (JSON) | NovoVoluntarioDto |
 | Corpo retornado (JSON) | UsuarioDto |
 
+#### Listar todos voluntários
+
+| URL | /api/v1/public/voluntarios |
+| --- | --- |
+| Tipo | GET 
+| Corpo retornado (JSON) | VoluntarioDto (array) |
+
+#### Listar um voluntário
+
+| URL | /api/v1/public/voluntarios/{id} |
+| --- | --- |
+| Tipo | GET 
+| Corpo retornado (JSON) | VoluntarioDto |
+
+#### Atualizar o MEU voluntário
+
+Atualiza os dados do voluntário que estiver autenticado. Só funciona se tiver autenticado (ou seja, se mandar o JWT) e se o usuário for um voluntário.
+**NOTE** que isso substitui os dados anteriores do voluntário, então todos os campos devem ser enviados, mesmo que não tenham sido modificados.
+
+| URL | /api/v1/voluntario/update |
+| --- | --- |
+| Tipo | PUT 
+| Cabeçalho enviado | Authentication (contento o JWT) |
+| Corpo enviado (JSON) | NovoVoluntarioDto |
+| Corpo retornado (JSON) | UsuarioDto |
+
+### ONGs
+
 #### Criar ong
 
-| URL | /api/v1/public/users/create/ong |
+| URL | /api/v1/public/ongs |
 | --- | --- |
 | Tipo | POST 
+| Corpo enviado (JSON) | NovaOngDto |
+| Corpo retornado (JSON) | UsuarioDto |
+
+#### Listar todas ongs
+
+| URL | /api/v1/public/ongs |
+| --- | --- |
+| Tipo | GET 
+| Corpo retornado (JSON) | OngDto (array) |
+
+#### Listar uma ong
+
+| URL | /api/v1/public/ongs/{id} |
+| --- | --- |
+| Tipo | GET 
+| Corpo retornado (JSON) | OngDto |
+
+#### Atualizar MINHA ong
+
+Atualiza os dados da ONG que estiver autenticada. Só funciona se tiver autenticado (ou seja, se mandar o JWT) e se o usuário for um ONG.
+**NOTE** que isso substitui os dados anteriores da ONG, então todos os campos devem ser enviados, mesmo que não tenham sido modificados.
+
+| URL | /api/v1/ong/update |
+| --- | --- |
+| Tipo | PUT 
+| Cabeçalho enviado | Authentication (contento o JWT) |
 | Corpo enviado (JSON) | NovaOngDto |
 | Corpo retornado (JSON) | UsuarioDto |
 
@@ -86,10 +140,15 @@ Resposta genérica dada em certas situações, como erros.
 
 ### CredenciaisDto
 
+Usado pra autenticação.
+
 - username
 - senha
 
 ### UsuarioDto
+
+Representa um usuário (ong, voluntário ou admin).
+Usado geralmente pra saber quem está autenticado.
 
 - id
 - username
@@ -99,6 +158,8 @@ Resposta genérica dada em certas situações, como erros.
 
 ### NovoVoluntarioDto
 
+Usado pra criar e atualizar Voluntarios.
+
 - username
 - senha
 - nome
@@ -107,6 +168,8 @@ Resposta genérica dada em certas situações, como erros.
 - areasInteressadas (array)
 
 ### NovaOngDto
+
+Usado pra criar e atualizar ONGs.
 
 - username
 - senha
@@ -122,6 +185,8 @@ Resposta genérica dada em certas situações, como erros.
 - endereco (EnderecoDto)
 
 ### EnderecoDto
+
+Usado em ONGs e eventos.
 
 - uf
 - cidade

@@ -1,18 +1,33 @@
 package com.crossover.ivolunteer.presentation.controller;
 
+import com.crossover.ivolunteer.business.entity.Endereco;
 import com.crossover.ivolunteer.business.entity.Ong;
+import com.crossover.ivolunteer.business.entity.Sessao;
+import com.crossover.ivolunteer.business.entity.Usuario;
+import com.crossover.ivolunteer.business.enums.TipoUsuarioEnum;
+import com.crossover.ivolunteer.business.service.EnderecoService;
 import com.crossover.ivolunteer.business.service.OngService;
 import com.crossover.ivolunteer.business.service.UsuarioService;
+import com.crossover.ivolunteer.business.service.VoluntarioService;
 import com.crossover.ivolunteer.presentation.constants.ApiPaths;
+import com.crossover.ivolunteer.presentation.dto.NovaOngDto;
+import com.crossover.ivolunteer.presentation.dto.UsuarioDto;
+import com.crossover.ivolunteer.security.jwt.JWTHttpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.Collection;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.time.LocalDateTime;
 
+/**
+ * Endpoints pra manipular a ong autenticada.
+ */
 @RestController
 public class OngController {
 
@@ -20,46 +35,76 @@ public class OngController {
     private UsuarioService usuarioService;
 
     @Autowired
+    private VoluntarioService voluntarioService;
+
+    @Autowired
     private OngService ongService;
 
-    @GetMapping(ApiPaths.V1.ONGS_PREFIX)
-    private Collection<Ong> getAll() {
-        // TODO: Add pagination to this
-        return ongService.findAll();
+    @Autowired
+    private EnderecoService enderecoService;
+
+    @Autowired
+    private JWTHttpService jwtHttpService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @PutMapping(ApiPaths.V1.ONG_PREFIX + "/update")
+    private UsuarioDto updateOng(@Valid @RequestBody NovaOngDto novaOngDto, HttpServletRequest request) {
+
+        Sessao sessao = jwtHttpService.getSessaoFromRequest(request);
+        Usuario usuario = sessao == null ? null : sessao.getUsuario();
+        if (usuario == null)
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
+
+        if (usuario.getTipo() != TipoUsuarioEnum.ONG)
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "User isn't ong");
+
+        Ong antigaOng = usuario.getOng();
+        Endereco antigoEndereco = antigaOng.getEndereco();
+
+        Endereco endereco = null;
+        if (novaOngDto.getEndereco() != null) {
+            endereco = Endereco.builder()
+                    .id(antigoEndereco == null ? null : antigoEndereco.getId())
+                    .uf(novaOngDto.getEndereco().getUf())
+                    .cidade(novaOngDto.getEndereco().getCidade())
+                    .cep(novaOngDto.getEndereco().getCep())
+                    .bairro(novaOngDto.getEndereco().getBairro())
+                    .complemento1(novaOngDto.getEndereco().getComplemento1())
+                    .complemento2(novaOngDto.getEndereco().getComplemento2())
+                    .build();
+            endereco = enderecoService.save(endereco);
+        }
+
+        Ong ong = Ong.builder()
+                .id(antigaOng.getId())
+                .nome(novaOngDto.getNome())
+                .email(novaOngDto.getEmail())
+                .areas(novaOngDto.getAreas())
+                .dataCriacao(LocalDateTime.now())
+                .dataFundacao(novaOngDto.getDataFundacao())
+                .endereco(endereco)
+                .descricao(novaOngDto.getDescricao())
+                .doacoes(novaOngDto.getDoacoes())
+                .telefone(novaOngDto.getTelefone())
+                .urlFacebook(novaOngDto.getUrlFacebook())
+                .urlWebsite(novaOngDto.getUrlWebsite())
+                .build();
+        ong = ongService.save(ong);
+
+        usuario = Usuario.builder()
+                .id(usuario.getId())
+                .username(novaOngDto.getUsername())
+                .senha(passwordEncoder.encode(novaOngDto.getSenha()))
+                .tipo(TipoUsuarioEnum.ONG)
+                .ong(ong)
+                .build();
+        usuario = usuarioService.save(usuario);
+
+        ong.setUsuario(usuario);
+        ong = ongService.save(ong);
+        return new UsuarioDto(usuario);
     }
 
-    @GetMapping(ApiPaths.V1.ONGS_PREFIX + "/{id}")
-    private Ong get(@PathVariable("id") long id) {
-        Ong ong = ongService.findById(id);
-        if (ong == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        return ong;
-    }
-
-//    @PostMapping(path = "/ongs", params = {"googleIdToken"})
-//    private Ong save(@RequestBody Ong ong,
-//                     @RequestParam("googleIdToken") String googleIdToken,
-//                     HttpServletRequest request) {
-//
-//        Usuario usuario = googleAuthService.getOrCreateUserFromIdToken(googleIdToken);
-//        if (usuario == null)
-//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token invalid");
-//
-//        Ong currentOng = usuario.getOng();
-//        if (currentOng == null) {
-//            ong.setId(null);
-//            ong.setUsuario(usuario);
-//            currentOng = ongService.save(ong);
-//            usuario.setOng(currentOng);
-//            usuario = usuarioService.save(usuario);
-//        } else {
-//            if (ong.getId() == null)
-//                ong.setId(currentOng.getId());
-//            else if (!Objects.equals(currentOng.getId(), ong.getId()))
-//                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Usuario already has another Ong - Is " + ong.getId() + " but should be " + currentOng.getId());
-//            ong.setUsuario(usuario);
-//            currentOng = ongService.save(ong);
-//        }
-//        return currentOng;
-//    }
 }
