@@ -29,7 +29,7 @@ Usado para criar uma nova seção para um usuário. Você envia as credenciais e
 | URL | /api/v1/public/auth/authenticate |
 | --- | --- |
 | Tipo | POST 
-| Corpo esperado (JSON) | CredenciaisDto |
+| Corpo enviado (JSON) | CredenciaisDto |
 | Corpo retornado (JSON) | UsuarioDto |
 | Cabeçalho retornado | Authentication (contendo o JWT) |
 
@@ -41,7 +41,7 @@ Invalida a sessão do JWT enviado, caso ela exista.
 | --- | --- |
 | Tipo | GET 
 | Parâmetro opcional | **all**<br>*boolean*<br>Se true, desautentica TODAS as sessões daquele usuário. |
-| Cabeçalho esperado | Authentication (contento o JWT) |
+| Cabeçalho enviado | Authentication (contento o JWT) |
 | Corpo retornado (JSON) | RespostaSimplesDto |
 
 #### Ver usuário atual
@@ -49,7 +49,7 @@ Invalida a sessão do JWT enviado, caso ela exista.
 | URL | /api/v1/public/auth/whoami |
 | --- | --- |
 | Tipo | GET 
-| Cabeçalho esperado | Authentication (contento o JWT) |
+| Cabeçalho enviado | Authentication (contento o JWT) |
 | Corpo retornado (JSON) | UsuarioDto se tiver autenticado|
 
 ### Usuários
@@ -59,7 +59,7 @@ Invalida a sessão do JWT enviado, caso ela exista.
 | URL | /api/v1/public/users/create/voluntario |
 | --- | --- |
 | Tipo | POST 
-| Corpo esperado (JSON) | NovoVoluntarioDto |
+| Corpo enviado (JSON) | NovoVoluntarioDto |
 | Corpo retornado (JSON) | UsuarioDto |
 
 #### Criar ong
@@ -67,7 +67,7 @@ Invalida a sessão do JWT enviado, caso ela exista.
 | URL | /api/v1/public/users/create/ong |
 | --- | --- |
 | Tipo | POST 
-| Corpo esperado (JSON) | NovaOngDto |
+| Corpo enviado (JSON) | NovaOngDto |
 | Corpo retornado (JSON) | UsuarioDto |
 
 ## API Objects
@@ -105,3 +105,27 @@ Resposta genérica dada em certas situações, como erros.
 - email
 - dataNascimento
 - areasInteressadas (array)
+
+### NovaOngDto
+
+- username
+- senha
+- nome
+- descricao
+- doacao
+- dataFundacao ("MM/dd/yyyy")
+- areas (array)
+- telefone
+- email (tem que ser válido)
+- urlFacebook
+- urlWebsite
+- endereco (EnderecoDto)
+
+### EnderecoDto
+
+- uf
+- cidade
+- cep
+- bairro
+- complemento1
+- complemento2
