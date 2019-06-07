@@ -28,7 +28,7 @@ public class NovaOngDto {
     @NotBlank
     private String descricao;
 
-    private String doacao;
+    private String doacoes;
 
     @JsonFormat(pattern = ("MM/dd/yyyy"))
     private LocalDate dataFundacao;

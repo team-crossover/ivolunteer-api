@@ -99,7 +99,7 @@ public class UserController {
                 .dataFundacao(novaOngDto.getDataFundacao())
                 .endereco(endereco)
                 .descricao(novaOngDto.getDescricao())
-                .doacoes(novaOngDto.getDoacao())
+                .doacoes(novaOngDto.getDoacoes())
                 .telefone(novaOngDto.getTelefone())
                 .urlFacebook(novaOngDto.getUrlFacebook())
                 .urlWebsite(novaOngDto.getUrlWebsite())

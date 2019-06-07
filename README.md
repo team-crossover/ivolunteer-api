@@ -112,7 +112,7 @@ Resposta genérica dada em certas situações, como erros.
 - senha
 - nome
 - descricao
-- doacao
+- doacoes
 - dataFundacao ("MM/dd/yyyy")
 - areas (array)
 - telefone
