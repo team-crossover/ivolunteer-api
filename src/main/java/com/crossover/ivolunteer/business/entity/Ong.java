@@ -34,7 +34,6 @@ public class Ong {
     @Size(min = 1, max = 500)
     private String doacoes;
 
-    @NotNull
     @OneToOne(orphanRemoval = true)
     private Endereco endereco;
 

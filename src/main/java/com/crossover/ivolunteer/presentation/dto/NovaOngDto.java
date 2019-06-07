@@ -1,5 +1,6 @@
 package com.crossover.ivolunteer.presentation.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,7 @@ public class NovaOngDto {
 
     private String doacao;
 
+    @JsonFormat(pattern = ("MM/dd/yyyy"))
     private LocalDate dataFundacao;
 
     private List<String> areas;
