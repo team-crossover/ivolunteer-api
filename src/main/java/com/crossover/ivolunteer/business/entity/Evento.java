@@ -1,7 +1,9 @@
 package com.crossover.ivolunteer.business.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -16,7 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "eventos")
-@ToString(exclude = {"favoritantes", "funcoes", "participacoes"}) // Excluir todos os campos derivados do toString()
 public class Evento {
 
     @Id
@@ -41,24 +42,12 @@ public class Evento {
 
     private LocalDateTime dataCriacao;
 
+    @Builder.Default
     @ElementCollection
     private List<String> areas = new ArrayList<>();
 
-//    TODO: Adicionar suporte a imagens
-//    private Imagem img;
-
-    // --- Campos derivados ---
-
-    @ManyToMany(mappedBy = "eventosFavoritados")
-    @JsonIgnore
-    private List<Voluntario> favoritantes = new ArrayList<>();
-
-    @OneToMany(mappedBy = "evento")
-    @JsonIgnore
-    private List<Funcao> funcoes = new ArrayList<>();
-
-    @OneToMany(mappedBy = "evento")
-    @JsonIgnore
-    private List<Participacao> participacoes = new ArrayList<>();
+    @Builder.Default
+    @ManyToMany
+    private List<Voluntario> confirmados = new ArrayList<>();
 
 }

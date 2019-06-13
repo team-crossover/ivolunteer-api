@@ -13,10 +13,16 @@ import lombok.NoArgsConstructor;
 public class UsuarioDto {
 
     private Long id;
+
     private String username;
+
     private String tipo;
+
     private Long idOng;
+
     private Long idVoluntario;
+
+    private String jwt;
 
     public UsuarioDto(Usuario usuario) {
         id = usuario.getId();

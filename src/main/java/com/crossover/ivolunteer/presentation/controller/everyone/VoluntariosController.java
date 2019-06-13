@@ -1,4 +1,4 @@
-package com.crossover.ivolunteer.presentation.controller;
+package com.crossover.ivolunteer.presentation.controller.everyone;
 
 import com.crossover.ivolunteer.business.entity.Usuario;
 import com.crossover.ivolunteer.business.entity.Voluntario;
@@ -7,7 +7,7 @@ import com.crossover.ivolunteer.business.service.UsuarioService;
 import com.crossover.ivolunteer.business.service.VoluntarioService;
 import com.crossover.ivolunteer.presentation.constants.ApiPaths;
 import com.crossover.ivolunteer.presentation.dto.NovoVoluntarioDto;
-import com.crossover.ivolunteer.presentation.dto.UsuarioDto;
+import com.crossover.ivolunteer.presentation.dto.VoluntarioDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @RestController
 public class VoluntariosController {
@@ -31,8 +32,22 @@ public class VoluntariosController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @GetMapping(ApiPaths.V1.VOLUNTARIOS_PREFIX + "/{id}")
+    private VoluntarioDto get(@PathVariable("id") long id) {
+        Voluntario voluntario = voluntarioService.findById(id);
+        if (voluntario == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Voluntario not found");
+        return new VoluntarioDto(voluntario);
+    }
+
+    @GetMapping(ApiPaths.V1.VOLUNTARIOS_PREFIX)
+    private Collection<VoluntarioDto> getAll() {
+        // TODO: Add pagination to this
+        return voluntarioService.findAll().stream().map(VoluntarioDto::new).collect(Collectors.toList());
+    }
+
     @PostMapping(ApiPaths.V1.VOLUNTARIOS_PREFIX)
-    private UsuarioDto createVoluntario(@Valid @RequestBody NovoVoluntarioDto novoVoluntarioDto) {
+    private NovoVoluntarioDto add(@Valid @RequestBody NovoVoluntarioDto novoVoluntarioDto) {
 
         Usuario usuario = usuarioService.findByUsername(novoVoluntarioDto.getUsername());
         if (usuario != null)
@@ -57,23 +72,10 @@ public class VoluntariosController {
 
         voluntario.setUsuario(usuario);
         voluntario = voluntarioService.save(voluntario);
-        return new UsuarioDto(usuario);
-    }
 
-    // TODO: VoluntairoDto
-    @GetMapping(ApiPaths.V1.VOLUNTARIOS_PREFIX)
-    private Collection<Voluntario> getAll() {
-        // TODO: Add pagination to this
-        return voluntarioService.findAll();
-    }
-
-    // TODO: VoluntairoDto
-    @GetMapping(ApiPaths.V1.VOLUNTARIOS_PREFIX + "/{id}")
-    private Voluntario get(@PathVariable("id") long id) {
-        Voluntario voluntario = voluntarioService.findById(id);
-        if (voluntario == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Voluntario not found");
-        return voluntario;
+        NovoVoluntarioDto voluntCriado = new NovoVoluntarioDto(voluntario);
+        voluntCriado.setSenha(novoVoluntarioDto.getSenha());
+        return voluntCriado;
     }
 
 }

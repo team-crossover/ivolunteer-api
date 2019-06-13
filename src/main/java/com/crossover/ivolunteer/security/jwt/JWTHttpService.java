@@ -22,9 +22,9 @@ import java.nio.charset.StandardCharsets;
 @Transactional
 public class JWTHttpService {
 
-    private static final String HTTP_HEADER = "Authorization";
+    public static final String HTTP_HEADER = "Authorization";
 
-    private static final String HTTP_PREFIX = "Bearer";
+    public static final String HTTP_PREFIX = "Bearer";
 
     @Autowired
     private UsuarioService usuarioService;

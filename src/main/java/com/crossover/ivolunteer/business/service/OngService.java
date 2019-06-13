@@ -5,13 +5,12 @@ import com.crossover.ivolunteer.data.repository.OngRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+
 
 @Service
 @Transactional
 public class OngService extends EntityServiceBase<Ong, Long, OngRepository> {
 
-//    public Ong findByUserId(Long idOwner) {
-//        return repository.findByUserId(idOwner).orElse(null);
-//    }
 
 }

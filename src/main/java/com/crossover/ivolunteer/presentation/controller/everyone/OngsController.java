@@ -1,4 +1,4 @@
-package com.crossover.ivolunteer.presentation.controller;
+package com.crossover.ivolunteer.presentation.controller.everyone;
 
 import com.crossover.ivolunteer.business.entity.Endereco;
 import com.crossover.ivolunteer.business.entity.Ong;
@@ -9,17 +9,20 @@ import com.crossover.ivolunteer.business.service.OngService;
 import com.crossover.ivolunteer.business.service.UsuarioService;
 import com.crossover.ivolunteer.presentation.constants.ApiPaths;
 import com.crossover.ivolunteer.presentation.dto.NovaOngDto;
-import com.crossover.ivolunteer.presentation.dto.UsuarioDto;
+import com.crossover.ivolunteer.presentation.dto.OngDto;
+import com.crossover.ivolunteer.util.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 public class OngsController {
@@ -36,8 +39,38 @@ public class OngsController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @GetMapping(ApiPaths.V1.ONGS_PREFIX + "/{id}")
+    private OngDto get(@PathVariable("id") long id) {
+        Ong ong = ongService.findById(id);
+        if (ong == null)
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+        return new OngDto(ong);
+    }
+
+    static class OngComparatorBySeguidores implements Comparator<Ong> {
+        public int compare(Ong c1, Ong c2) {
+            return c1.getSeguidores().size() - c2.getSeguidores().size();
+        }
+    }
+
+    @GetMapping(ApiPaths.V1.ONGS_PREFIX)
+    private Collection<OngDto> getAll(@RequestParam(name = "nome", required = false) String nome,
+                                      @RequestParam(name = "areas", required = false) String[] areas) {
+        // TODO: Add pagination to this
+        Stream<Ong> ongs = ongService.findAll().stream();
+        if (nome != null && nome.length() > 0) {
+            String finalNome = nome.toLowerCase();
+            ongs = ongs.filter(o -> o.getNome().toLowerCase().contains(finalNome));
+        }
+        if (areas != null && areas.length > 0) {
+            ongs = ongs.filter(o -> ArrayUtils.containsAny(o.getAreas().toArray(), areas));
+        }
+        ongs = ongs.sorted(new OngComparatorBySeguidores());
+        return ongs.map(OngDto::new).collect(Collectors.toList());
+    }
+
     @PostMapping(ApiPaths.V1.ONGS_PREFIX)
-    private UsuarioDto createOng(@Valid @RequestBody NovaOngDto novaOngDto) {
+    private NovaOngDto add(@Valid @RequestBody NovaOngDto novaOngDto) {
 
         Usuario usuario = usuarioService.findByUsername(novaOngDto.getUsername());
         if (usuario != null)
@@ -81,23 +114,9 @@ public class OngsController {
 
         ong.setUsuario(usuario);
         ong = ongService.save(ong);
-        return new UsuarioDto(usuario);
-    }
 
-    // TODO: OngDto
-    @GetMapping(ApiPaths.V1.ONGS_PREFIX)
-    private Collection<Ong> getAll() {
-        // TODO: Add pagination to this
-        return ongService.findAll();
+        NovaOngDto ongCriada = new NovaOngDto(ong);
+        ongCriada.setSenha(novaOngDto.getSenha());
+        return ongCriada;
     }
-
-    // TODO: OngDto
-    @GetMapping(ApiPaths.V1.ONGS_PREFIX + "/{id}")
-    private Ong get(@PathVariable("id") long id) {
-        Ong ong = ongService.findById(id);
-        if (ong == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        return ong;
-    }
-
 }

@@ -5,7 +5,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -41,6 +40,7 @@ public class Ong {
 
     private LocalDateTime dataCriacao;
 
+    @Builder.Default
     @ElementCollection
     private List<String> areas = new ArrayList<>();
 
@@ -67,10 +67,12 @@ public class Ong {
     @JsonIgnore
     private Usuario usuario;
 
+    @Builder.Default
     @OneToMany(mappedBy = "ong")
     @JsonIgnore
     private List<Evento> eventos = new ArrayList<>();
 
+    @Builder.Default
     @ManyToMany(mappedBy = "ongsSeguidas")
     @JsonIgnore
     private List<Voluntario> seguidores = new ArrayList<>();

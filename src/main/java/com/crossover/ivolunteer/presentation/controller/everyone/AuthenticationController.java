@@ -1,4 +1,4 @@
-package com.crossover.ivolunteer.presentation.controller;
+package com.crossover.ivolunteer.presentation.controller.everyone;
 
 import com.crossover.ivolunteer.business.entity.Sessao;
 import com.crossover.ivolunteer.business.entity.Usuario;
@@ -33,8 +33,11 @@ public class AuthenticationController {
     @Autowired
     private JWTHttpService jwtHttpService;
 
-    // NOTE: Authentication is handled at WebSecurityConfig.
+    // NOTE: Authentication is handled at WebSecurityConfig. Here we only deal with whoami and deauthentication.
 
+    /**
+     * Retorna o Usuário atualmente autenticado, caso esteja autenticado.
+     */
     @GetMapping(ApiPaths.V1.AUTH_WHOAMI)
     public UsuarioDto whoami(HttpServletRequest request) {
         // Fetches the user from the request's session.
@@ -56,11 +59,9 @@ public class AuthenticationController {
 
         // Fetches the usuario from the request's sessao.
         Sessao sessao = jwtHttpService.getSessaoFromRequest(request);
-        if (sessao == null)
-            return new RespostaSimplesDto(
-                    HttpStatus.UNAUTHORIZED,
-                    ApiPaths.V1.AUTH_DEAUTHENTICATE,
-                    "No valid token was provided");
+        Usuario usuario = sessao == null ? null : sessao.getUsuario();
+        if (usuario == null)
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
 
         // Clears current authentication and invalidates current HTTP sessao
         SecurityContextHolder.getContext().setAuthentication(null);
@@ -68,7 +69,6 @@ public class AuthenticationController {
         if (httpSession != null)
             httpSession.invalidate();
 
-        Usuario usuario = sessao.getUsuario();
         if (all != null && all) {
             sessaoService.deleteAllByUsuarioId(usuario.getId());
             return new RespostaSimplesDto(

@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class EnderecoService extends EntityServiceBase<Endereco, Long, EnderecoRepository> {
 
-//    public Usuario findByGoogleId(String googleId) {
+//    everyone Usuario findByGoogleId(String googleId) {
 //        return repository.findByGoogleId(googleId).orElse(null);
 //    }
 

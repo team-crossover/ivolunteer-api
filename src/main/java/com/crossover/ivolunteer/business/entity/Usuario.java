@@ -43,6 +43,7 @@ public class Usuario {
 
     // --- Campos derivados ---
 
+    @Builder.Default
     @OneToMany(mappedBy = "usuario")
     @JsonIgnore
     private Collection<Sessao> sessoes = new ArrayList<>();

@@ -36,6 +36,7 @@ public class Postagem {
 
     // --- Campos derivados ---
 
+    @Builder.Default
     @ManyToMany(mappedBy = "postagensFavoritadas")
     private List<Voluntario> favoritantes = new ArrayList<>();
 

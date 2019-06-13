@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "voluntarios")
-@ToString(exclude = {"usuario", "participacoes"}) // Excluir todos os campos derivados do toString()
+@ToString(exclude = {"usuario", "eventosConfirmados"}) // Excluir todos os campos derivados do toString()
 public class Voluntario {
 
     @Id
@@ -36,16 +36,13 @@ public class Voluntario {
     private LocalDateTime dataCriacao;
 
     @ElementCollection
+    @Builder.Default
     private List<String> areasInteressadas = new ArrayList<>();
 
     @ManyToMany
+    @Builder.Default
     private List<Ong> ongsSeguidas = new ArrayList<>();
 
-    @ManyToMany
-    private List<Evento> eventosFavoritados = new ArrayList<>();
-
-    @ManyToMany
-    private List<Postagem> postagensFavoritadas = new ArrayList<>();
 
 //    TODO: Adicionar suporte a imagens
 //    private Imagem imgPerfil;
@@ -56,8 +53,9 @@ public class Voluntario {
     @JsonIgnore
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "voluntario")
+    @Builder.Default
+    @ManyToMany(mappedBy = "confirmados")
     @JsonIgnore
-    private List<Participacao> participacoes = new ArrayList<>();
+    private List<Evento> eventosConfirmados = new ArrayList<>();
 
 }

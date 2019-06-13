@@ -1,7 +1,6 @@
 package com.crossover.ivolunteer.business.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -25,17 +24,8 @@ public abstract class EntityServiceBase<TEntity, TId, TRepository extends JpaRep
         return repository.findAll();
     }
 
-    public <S extends TEntity> boolean exists(S item) {
-        return repository.exists(Example.of(item));
-    }
-
     public boolean existsById(TId id) {
         return repository.existsById(id);
-    }
-
-    public <S extends TEntity> void delete(S item) {
-        if (exists(item))
-            repository.delete(item);
     }
 
     public void deleteById(TId id) {

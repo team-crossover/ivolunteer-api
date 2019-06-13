@@ -1,12 +1,12 @@
 package com.crossover.ivolunteer.presentation.dto;
 
+import com.crossover.ivolunteer.business.entity.Endereco;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
@@ -14,27 +14,31 @@ import javax.validation.constraints.Size;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EnderecoDto {
 
-    @Size(min = 2, max = 2)
-    @Column(nullable = false)
+    @NotBlank
     private String uf;
 
-    @Size(max = 50)
-    @Column(nullable = false)
+    @NotBlank
     private String cidade;
 
-    @Size(min = 8, max = 8)
-    @Column(nullable = false)
+    @NotBlank
     private String cep;
 
-    @Size(max = 50)
-    @Column(nullable = false)
+    @NotBlank
     private String bairro;
 
-    @Size(max = 50)
+    @NotBlank
     private String complemento1;
 
-    @Size(max = 50)
     private String complemento2;
+
+    public EnderecoDto(Endereco endereco) {
+        this.uf = endereco.getUf();
+        this.cidade = endereco.getCidade();
+        this.cep = endereco.getCep();
+        this.bairro = endereco.getBairro();
+        this.complemento1 = endereco.getComplemento1();
+        this.complemento2 = endereco.getComplemento2();
+    }
 
 
 }

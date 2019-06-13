@@ -83,8 +83,9 @@ public class JWTAuthenticationProcessingFilter extends AbstractAuthenticationPro
         // Add a JWT with the created session to the response
         jwtHttpService.addSessaoToResponse(session, response);
 
-        // Returns the authenticated user
+        // Returns the authenticated user and the JWT
         UsuarioDto userDto = new UsuarioDto(user);
+        userDto.setJwt(response.getHeader(JWTHttpService.HTTP_HEADER));
         new ObjectMapper().writeValue(response.getWriter(), userDto);
     }
 
