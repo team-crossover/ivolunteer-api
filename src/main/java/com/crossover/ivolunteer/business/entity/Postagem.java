@@ -1,13 +1,14 @@
 package com.crossover.ivolunteer.business.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Builder
@@ -15,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "postagens")
-@ToString(exclude = {"favoritantes"}) // Excluir todos os campos derivados do toString()
 public class Postagem {
 
     @Id
@@ -23,7 +23,7 @@ public class Postagem {
     private Long id;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne  
     private Ong ong;
 
     @Size(min = 1, max = 100)
@@ -33,11 +33,4 @@ public class Postagem {
     private String texto;
 
     private LocalDateTime dataCriacao;
-
-    // --- Campos derivados ---
-
-    @Builder.Default
-    @ManyToMany(mappedBy = "postagensFavoritadas")
-    private List<Voluntario> favoritantes = new ArrayList<>();
-
 }
