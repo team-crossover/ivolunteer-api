@@ -48,6 +48,7 @@ public class JWTHttpService {
             return null;
 
         String tokenString = token.replace(HTTP_PREFIX, "").trim();
+        System.out.println("token string: " + tokenString);
         JWT jwt = JWT.fromTokenString(tokenString, secretSigninKey);
         return jwt == null ? null : jwt.fetchSession(usuarioService, sessaoService);
     }

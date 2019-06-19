@@ -71,18 +71,18 @@ public class JWT {
     public Sessao fetchSession(UsuarioService usuarioService,
                                SessaoService sessaoService) {
         if (username == null) {
-            log.debug("Invalid JWT: username is null");
+            log.info("Invalid JWT: username is null");
             return null;
         }
         Usuario usuario = usuarioService.findByUsername(username);
         if (usuario == null) {
-            log.debug("Invalid JWT: username doesn't exist or was changed");
+            log.info("Invalid JWT: username doesn't exist or was changed");
             return null;
         } else if (!senha.equals(usuario.getSenha())) {
-            log.debug("Invalid JWT: senha was changed");
+            log.info("Invalid JWT: senha was changed");
             return null;
         } else if (!sessaoService.isOwnedByUsuario(idSessao, usuario.getId())) {
-            log.debug("Invalid JWT: user doesn't own this session ID (maybe it was removed)");
+            log.info("Invalid JWT: user doesn't own this session ID (maybe it was removed)");
             return null;
         }
         return sessaoService.findById(idSessao);

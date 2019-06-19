@@ -1,5 +1,6 @@
 package com.crossover.ivolunteer.security;
 
+import com.crossover.ivolunteer.business.enums.TipoUsuarioEnum;
 import com.crossover.ivolunteer.business.service.SessaoService;
 import com.crossover.ivolunteer.business.service.UsuarioService;
 import com.crossover.ivolunteer.presentation.constants.ApiPaths;
@@ -78,13 +79,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/static/**").permitAll()
 
                 // Allows our API endpoints based on roles
-//                .antMatchers(ApiPaths.V1.ADMIN_PREFIX + "/**").hasRole(TipoUsuarioEnum.ADMIN.name())
-//                .antMatchers(ApiPaths.V1.ONG_PREFIX + "/**").hasRole(TipoUsuarioEnum.ONG.name())
-//                .antMatchers(ApiPaths.V1.VOLUNTARIO_PREFIX + "/**").hasRole(TipoUsuarioEnum.VOLUNTARIO.name())
-//                .antMatchers(ApiPaths.V1.PUBLIC_PREFIX + "/**").permitAll()
-//
-//                // Everything else requires admin
-//                .anyRequest().hasRole(TipoUsuarioEnum.ADMIN.name())
+                .antMatchers(ApiPaths.V1.ADMIN_PREFIX).hasRole(TipoUsuarioEnum.ADMIN.name())
+                .antMatchers(ApiPaths.V1.ADMIN_PREFIX + "/**").hasRole(TipoUsuarioEnum.ADMIN.name())
+                .antMatchers(ApiPaths.V1.ONG_PREFIX).hasRole(TipoUsuarioEnum.ONG.name())
+                .antMatchers(ApiPaths.V1.ONG_PREFIX + "/**").hasRole(TipoUsuarioEnum.ONG.name())
+                .antMatchers(ApiPaths.V1.VOLUNTARIO_PREFIX).hasRole(TipoUsuarioEnum.VOLUNTARIO.name())
+                .antMatchers(ApiPaths.V1.VOLUNTARIO_PREFIX + "/**").hasRole(TipoUsuarioEnum.VOLUNTARIO.name())
+                .antMatchers(ApiPaths.V1.PUBLIC_PREFIX).permitAll()
+                .antMatchers(ApiPaths.V1.PUBLIC_PREFIX + "/**").permitAll()
+
+                // Everything else requires admin
+                .anyRequest().hasRole(TipoUsuarioEnum.ADMIN.name())
 
                 // Add the authentication filters.
                 .and()
@@ -109,7 +114,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("*"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setExposedHeaders(Arrays.asList("Authorization", "authorization", "Content-Type", "content-type", "x-requested-with", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "x-auth-token", "x-app-id", "Origin","Accept", "X-Requested-With", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "authorization", "Content-Type", "content-type", "x-requested-with", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "x-auth-token", "x-app-id", "Origin", "Accept", "X-Requested-With", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

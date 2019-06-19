@@ -123,6 +123,9 @@ public class VoluntarioController {
 
     private Usuario getAuthenticatedUsuarioVoluntario(HttpServletRequest request) throws HttpClientErrorException {
         Sessao sessao = jwtHttpService.getSessaoFromRequest(request);
+        if (sessao == null) {
+
+        }
         Usuario usuario = sessao == null ? null : sessao.getUsuario();
         if (usuario == null) {
             System.out.println("n ta logado uaaaaaaaaaai? " + request.getHeader("Authorization"));
