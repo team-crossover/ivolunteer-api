@@ -22,7 +22,6 @@ public class NovoVoluntarioDto {
     @NotBlank
     private String username;
 
-    @NotBlank
     private String senha;
 
     @NotBlank

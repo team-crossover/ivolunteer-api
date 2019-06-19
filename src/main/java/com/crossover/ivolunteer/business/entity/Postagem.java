@@ -23,7 +23,7 @@ public class Postagem {
     private Long id;
 
     @NotNull
-    @ManyToOne  
+    @ManyToOne
     private Ong ong;
 
     @Size(min = 1, max = 100)

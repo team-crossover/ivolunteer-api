@@ -63,13 +63,10 @@ public class VoluntarioController {
                 .build();
         voluntario = voluntarioService.save(voluntario);
 
-        usuario = Usuario.builder()
-                .id(usuario.getId())
-                .username(novoVoluntarioDto.getUsername())
-                .senha(passwordEncoder.encode(novoVoluntarioDto.getSenha()))
-                .tipo(TipoUsuarioEnum.VOLUNTARIO)
-                .voluntario(voluntario)
-                .build();
+        if (novoVoluntarioDto.getUsername() != null)
+            usuario.setUsername(novoVoluntarioDto.getUsername());
+        if (novoVoluntarioDto.getSenha() != null)
+            usuario.setSenha(passwordEncoder.encode(novoVoluntarioDto.getSenha()));
         usuario = usuarioService.save(usuario);
 
         voluntario.setUsuario(usuario);
@@ -127,8 +124,10 @@ public class VoluntarioController {
     private Usuario getAuthenticatedUsuarioVoluntario(HttpServletRequest request) throws HttpClientErrorException {
         Sessao sessao = jwtHttpService.getSessaoFromRequest(request);
         Usuario usuario = sessao == null ? null : sessao.getUsuario();
-        if (usuario == null)
+        if (usuario == null) {
+            System.out.println("n ta logado uaaaaaaaaaai? " + request.getHeader("Authorization"));
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
+        }
         if (usuario.getTipo() != TipoUsuarioEnum.VOLUNTARIO)
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "User isn't voluntario");
         return usuario;
