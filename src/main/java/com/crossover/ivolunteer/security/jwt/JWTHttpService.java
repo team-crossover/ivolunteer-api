@@ -44,7 +44,6 @@ public class JWTHttpService {
 
     public Sessao getSessaoFromRequest(HttpServletRequest request) {
         String token = request.getHeader(HTTP_HEADER);
-        System.out.println("tokennn:" + token.toString() + "|" + token.toLowerCase() + " | " + token.length());
         if (token == null || !token.startsWith(HTTP_PREFIX))
             return null;
 

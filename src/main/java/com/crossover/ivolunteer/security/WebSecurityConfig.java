@@ -1,5 +1,6 @@
 package com.crossover.ivolunteer.security;
 
+import com.crossover.ivolunteer.business.enums.TipoUsuarioEnum;
 import com.crossover.ivolunteer.business.service.SessaoService;
 import com.crossover.ivolunteer.business.service.UsuarioService;
 import com.crossover.ivolunteer.presentation.constants.ApiPaths;
@@ -78,16 +79,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/static/**").permitAll()
 
                 // Allows our API endpoints based on roles
-                // TODO: Add this again, which we removed because it wasn't working :P
-//                .antMatchers(ApiPaths.V1.ADMIN_PREFIX).hasRole(TipoUsuarioEnum.ADMIN.name())
-//                .antMatchers(ApiPaths.V1.ADMIN_PREFIX + "/**").hasRole(TipoUsuarioEnum.ADMIN.name())
-//                .antMatchers(ApiPaths.V1.ONG_PREFIX).hasRole(TipoUsuarioEnum.ONG.name())
-//                .antMatchers(ApiPaths.V1.ONG_PREFIX + "/**").hasRole(TipoUsuarioEnum.ONG.name())
-//                .antMatchers(ApiPaths.V1.VOLUNTARIO_PREFIX).hasRole(TipoUsuarioEnum.VOLUNTARIO.name())
-//                .antMatchers(ApiPaths.V1.VOLUNTARIO_PREFIX + "/**").hasRole(TipoUsuarioEnum.VOLUNTARIO.name())
-//                .antMatchers(ApiPaths.V1.PUBLIC_PREFIX).permitAll()
-//                .antMatchers(ApiPaths.V1.PUBLIC_PREFIX + "/**").permitAll()
-//                .anyRequest().hasRole(TipoUsuarioEnum.ADMIN.name())
+                .antMatchers(ApiPaths.V1.ADMIN_PREFIX).hasRole(TipoUsuarioEnum.ADMIN.name())
+                .antMatchers(ApiPaths.V1.ADMIN_PREFIX + "/**").hasRole(TipoUsuarioEnum.ADMIN.name())
+                .antMatchers(ApiPaths.V1.ONG_PREFIX).hasRole(TipoUsuarioEnum.ONG.name())
+                .antMatchers(ApiPaths.V1.ONG_PREFIX + "/**").hasRole(TipoUsuarioEnum.ONG.name())
+                .antMatchers(ApiPaths.V1.VOLUNTARIO_PREFIX).hasRole(TipoUsuarioEnum.VOLUNTARIO.name())
+                .antMatchers(ApiPaths.V1.VOLUNTARIO_PREFIX + "/**").hasRole(TipoUsuarioEnum.VOLUNTARIO.name())
+                .antMatchers(ApiPaths.V1.PUBLIC_PREFIX).permitAll()
+                .antMatchers(ApiPaths.V1.PUBLIC_PREFIX + "/**").permitAll()
+                // Everything else requires admin role
+                .anyRequest().hasRole(TipoUsuarioEnum.ADMIN.name())
 
                 // Add the authentication filters.
                 .and()
