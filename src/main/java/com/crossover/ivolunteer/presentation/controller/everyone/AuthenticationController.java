@@ -61,7 +61,10 @@ public class AuthenticationController {
         Sessao sessao = jwtHttpService.getSessaoFromRequest(request);
         Usuario usuario = sessao == null ? null : sessao.getUsuario();
         if (usuario == null)
-            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
+            return new RespostaSimplesDto(
+                    HttpStatus.OK,
+                    ApiPaths.V1.AUTH_DEAUTHENTICATE,
+                    "Already deauthenticated");
 
         // Clears current authentication and invalidates current HTTP sessao
         SecurityContextHolder.getContext().setAuthentication(null);
