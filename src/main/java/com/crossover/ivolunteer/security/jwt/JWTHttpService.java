@@ -44,11 +44,11 @@ public class JWTHttpService {
 
     public Sessao getSessaoFromRequest(HttpServletRequest request) {
         String token = request.getHeader(HTTP_HEADER);
+        System.out.println("tokennn:" + token);
         if (token == null || !token.startsWith(HTTP_PREFIX))
             return null;
 
         String tokenString = token.replace(HTTP_PREFIX, "").trim();
-        System.out.println("token string: " + tokenString);
         JWT jwt = JWT.fromTokenString(tokenString, secretSigninKey);
         return jwt == null ? null : jwt.fetchSession(usuarioService, sessaoService);
     }
