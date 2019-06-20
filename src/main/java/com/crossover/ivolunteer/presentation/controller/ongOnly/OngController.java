@@ -82,13 +82,10 @@ public class OngController {
                 .build();
         ong = ongService.save(ong);
 
-        usuario = Usuario.builder()
-                .id(usuario.getId())
-                .username(novaOngDto.getUsername())
-                .senha(passwordEncoder.encode(novaOngDto.getSenha()))
-                .tipo(TipoUsuarioEnum.ONG)
-                .ong(ong)
-                .build();
+        if (novaOngDto.getUsername() != null)
+            usuario.setUsername(novaOngDto.getUsername());
+        if (novaOngDto.getSenha() != null)
+            usuario.setSenha(passwordEncoder.encode(novaOngDto.getSenha()));
         usuario = usuarioService.save(usuario);
 
         ong.setUsuario(usuario);
