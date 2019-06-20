@@ -1,6 +1,5 @@
 package com.crossover.ivolunteer.security;
 
-import com.crossover.ivolunteer.business.enums.TipoUsuarioEnum;
 import com.crossover.ivolunteer.business.service.SessaoService;
 import com.crossover.ivolunteer.business.service.UsuarioService;
 import com.crossover.ivolunteer.presentation.constants.ApiPaths;
@@ -89,7 +88,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers(ApiPaths.V1.PUBLIC_PREFIX + "/**").permitAll()
 
                 // Everything else requires admin
-                .anyRequest().hasRole(TipoUsuarioEnum.ADMIN.name())
+//                .anyRequest().hasRole(TipoUsuarioEnum.ADMIN.name())
 
                 // Add the authentication filters.
                 .and()
