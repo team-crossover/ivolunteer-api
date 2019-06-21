@@ -185,7 +185,7 @@ Define se o voluntário logado está seguindo ou não a ONG com o ID especificad
 | POST | /api/v1/voluntario/ongs/{idOng}/seguir |
 | --- | --- |
 | Cabeçalho enviado | Authentication (contendo o JWT) |
-| Corpo enviado (JSON) | 'true' (para seguir)<br>ou 'false' (para deixar de seguir) |
+| Parâmetro obrigatório | **valor** - *boolean*<br>'true' (para seguir)<br>ou 'false' (para deixar de seguir) |
 | Corpo retornado (JSON) | OngDto |
 
 ##### Confirmar/desconfirmar interesse em evento
@@ -195,7 +195,7 @@ Define se o voluntário logado confirmou interesse ou não no evento com o ID es
 | POST | /api/v1/voluntario/eventos/{idEvento}/confirmar |
 | --- | --- |
 | Cabeçalho enviado | Authentication (contendo o JWT) |
-| Corpo enviado (JSON) | 'true' (confirmar presença)<br>ou 'false' (desconfirmar presença) |
+| Parâmetro obrigatório | **valor** - *boolean*<br>'true' (confirmar presença)<br>ou 'false' (desconfirmar presença) |
 | Corpo retornado (JSON) | EventoDto |
 
 -----

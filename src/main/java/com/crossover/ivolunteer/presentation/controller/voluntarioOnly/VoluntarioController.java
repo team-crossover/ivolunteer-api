@@ -78,7 +78,7 @@ public class VoluntarioController {
     }
 
     @PostMapping(ApiPaths.V1.VOLUNTARIO_PREFIX + "/eventos/{idEvento}/confirmar")
-    private EventoDto confirmarInteresse(@Valid @RequestBody Boolean deveConfirmar,
+    private EventoDto confirmarInteresse(@RequestParam(name = "valor", required = true) Boolean valor,
                                          @PathVariable Long idEvento,
                                          HttpServletRequest request) {
 
@@ -92,7 +92,7 @@ public class VoluntarioController {
 
         List<Voluntario> confirmados = evento.getConfirmados();
         confirmados.removeIf(v -> Objects.equals(v.getId(), voluntario.getId()));
-        if (deveConfirmar)
+        if (valor)
             confirmados.add(voluntario);
         evento.setConfirmados(confirmados);
         evento = eventoService.save(evento);
@@ -100,7 +100,7 @@ public class VoluntarioController {
     }
 
     @PostMapping(ApiPaths.V1.VOLUNTARIO_PREFIX + "/ongs/{idOng}/seguir")
-    private OngDto seguirOng(@Valid @RequestBody Boolean deveSeguir,
+    private OngDto seguirOng(@RequestParam(name = "valor", required = true) Boolean valor,
                              @PathVariable Long idOng,
                              HttpServletRequest request) {
 
@@ -114,7 +114,7 @@ public class VoluntarioController {
 
         List<Ong> seguidas = voluntario.getOngsSeguidas();
         seguidas.removeIf(o -> Objects.equals(o.getId(), idOng));
-        if (deveSeguir)
+        if (valor)
             seguidas.add(ong);
         voluntario.setOngsSeguidas(seguidas);
         voluntario = voluntarioService.save(voluntario);
