@@ -127,6 +127,7 @@ public class NovaOngDto {
                 .tipo(TipoUsuarioEnum.ONG)
                 .ong(ong)
                 .build();
+        usuario = usuarioService.save(usuario);
         ong.setUsuario(usuario);
         ong = ongService.save(ong);
         return usuarioService.save(usuario);

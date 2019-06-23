@@ -73,6 +73,7 @@ public class NovoVoluntarioDto {
                 .tipo(TipoUsuarioEnum.VOLUNTARIO)
                 .voluntario(voluntario)
                 .build();
+        usuario = usuarioService.save(usuario);
         voluntario.setUsuario(usuario);
         voluntario = voluntarioService.save(voluntario);
         return usuarioService.save(usuario);
