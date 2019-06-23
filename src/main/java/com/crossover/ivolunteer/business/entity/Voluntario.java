@@ -43,6 +43,7 @@ public class Voluntario {
     @Builder.Default
     private List<Ong> ongsSeguidas = new ArrayList<>();
 
+    @Lob
     private String imgPerfil;
 
     // --- Campos derivados ---

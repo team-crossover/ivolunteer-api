@@ -57,8 +57,10 @@ public class Ong {
     @Size(max = 100)
     private String urlWebsite;
 
+    @Lob
     private String imgPerfil;
 
+    @Lob
     @Builder.Default
     @ElementCollection
     private List<String> imgsGaleria = new ArrayList<>();
