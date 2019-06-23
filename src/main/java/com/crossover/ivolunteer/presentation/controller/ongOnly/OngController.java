@@ -19,7 +19,6 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -49,38 +48,17 @@ public class OngController {
     @PutMapping(ApiPaths.V1.ONG_PREFIX)
     private NovaOngDto update(@Valid @RequestBody NovaOngDto novaOngDto, HttpServletRequest request) {
         Usuario usuario = getAuthenticatedUsuarioOng(request);
-        Ong antigaOng = usuario.getOng();
-        Endereco antigoEndereco = antigaOng.getEndereco();
 
-        Endereco endereco = null;
+        Ong antigaOng = usuario.getOng();
+        novaOngDto.setId(antigaOng.getId());
+
+        Endereco antigoEndereco = antigaOng.getEndereco();
         if (novaOngDto.getEndereco() != null) {
-            endereco = Endereco.builder()
-                    .id(antigoEndereco == null ? null : antigoEndereco.getId())
-                    .uf(novaOngDto.getEndereco().getUf())
-                    .cidade(novaOngDto.getEndereco().getCidade())
-                    .cep(novaOngDto.getEndereco().getCep())
-                    .bairro(novaOngDto.getEndereco().getBairro())
-                    .complemento1(novaOngDto.getEndereco().getComplemento1())
-                    .complemento2(novaOngDto.getEndereco().getComplemento2())
-                    .build();
-            endereco = enderecoService.save(endereco);
+            novaOngDto.getEndereco().setId(antigoEndereco == null ? null : antigoEndereco.getId());
+            enderecoService.save(novaOngDto.getEndereco().toEntity());
         }
 
-        Ong ong = Ong.builder()
-                .id(antigaOng.getId())
-                .nome(novaOngDto.getNome())
-                .email(novaOngDto.getEmail())
-                .areas(novaOngDto.getAreas())
-                .dataCriacao(LocalDateTime.now())
-                .dataFundacao(novaOngDto.getDataFundacao())
-                .endereco(endereco)
-                .descricao(novaOngDto.getDescricao())
-                .doacoes(novaOngDto.getDoacoes())
-                .telefone(novaOngDto.getTelefone())
-                .urlFacebook(novaOngDto.getUrlFacebook())
-                .urlWebsite(novaOngDto.getUrlWebsite())
-                .build();
-        ong = ongService.save(ong);
+        Ong ong = ongService.save(novaOngDto.toOng(ongService, enderecoService));
 
         if (novaOngDto.getUsername() != null)
             usuario.setUsername(novaOngDto.getUsername());
@@ -91,9 +69,7 @@ public class OngController {
         ong.setUsuario(usuario);
         ong = ongService.save(ong);
 
-        NovaOngDto ongCriada = new NovaOngDto(ong);
-        ongCriada.setSenha(novaOngDto.getSenha());
-        return ongCriada;
+        return new NovaOngDto(ong, novaOngDto.getSenha());
     }
 
     @PostMapping(ApiPaths.V1.ONG_PREFIX + "/eventos")
@@ -114,31 +90,15 @@ public class OngController {
             eventoDto.setIdOng(ong.getId());
         }
 
-        Endereco endereco = Endereco.builder()
-                .id(null)
-                .uf(eventoDto.getLocal().getUf())
-                .cep(eventoDto.getLocal().getCep())
-                .cidade(eventoDto.getLocal().getCidade())
-                .bairro(eventoDto.getLocal().getBairro())
-                .complemento1(eventoDto.getLocal().getComplemento1())
-                .complemento2(eventoDto.getLocal().getComplemento2())
-                .build();
+        Endereco endereco = eventoDto.getLocal().toEntity();
         endereco = enderecoService.save(endereco);
 
-        Evento evento = Evento.builder()
-                .id(null)
-                .ong(ong)
-                .nome(eventoDto.getNome())
-                .descricao(eventoDto.getDescricao())
-                .local(endereco)
-                .dataCriacao(LocalDateTime.now())
-                .dataRealizacao(eventoDto.getDataRealizacao())
-                .areas(eventoDto.getAreas())
-                .build();
+        Evento evento = eventoDto.toEntity(ong, endereco);
         evento = eventoService.save(evento);
 
         ong.getEventos().add(evento);
         ong = ongService.save(ong);
+
         return new EventoDto(evento);
     }
 
@@ -171,27 +131,11 @@ public class OngController {
         if (!Objects.equals(antigoEvento.getOng().getId(), ong.getId()))
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Specified Event doesn't belong to the authenticated user's Ong");
 
-        Endereco endereco = Endereco.builder()
-                .id(null)
-                .uf(eventoDto.getLocal().getUf())
-                .cep(eventoDto.getLocal().getCep())
-                .cidade(eventoDto.getLocal().getCidade())
-                .bairro(eventoDto.getLocal().getBairro())
-                .complemento1(eventoDto.getLocal().getComplemento1())
-                .complemento2(eventoDto.getLocal().getComplemento2())
-                .build();
+        Endereco endereco = eventoDto.getLocal().toEntity();
         endereco = enderecoService.save(endereco);
 
-        Evento evento = Evento.builder()
-                .id(id)
-                .ong(ong)
-                .nome(eventoDto.getNome())
-                .descricao(eventoDto.getDescricao())
-                .local(endereco)
-                .dataCriacao(LocalDateTime.now())
-                .dataRealizacao(eventoDto.getDataRealizacao())
-                .areas(eventoDto.getAreas())
-                .build();
+        Evento evento = eventoDto.toEntity(ong, endereco);
+        evento.setId(id);
         evento = eventoService.save(evento);
 
         ong.getEventos().add(evento);

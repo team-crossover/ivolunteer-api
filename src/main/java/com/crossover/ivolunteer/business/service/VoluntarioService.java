@@ -12,8 +12,4 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class VoluntarioService extends EntityServiceBase<Voluntario, Long, VoluntarioRepository> {
 
-//    everyone Voluntario findByUserId(Long idOwner) {
-//        return repository.findByUserId(idOwner).orElse(null);
-//    }
-
 }

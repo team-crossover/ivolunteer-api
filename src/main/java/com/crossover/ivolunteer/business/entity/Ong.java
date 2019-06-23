@@ -57,9 +57,9 @@ public class Ong {
     @Size(max = 100)
     private String urlWebsite;
 
-//    TODO: Adicionar suporte a imagens
-//    private Imagem imgPerfil;
-//    private List<Imagem> imgsGaleria = new ArrayList<>();
+    private String imgPerfil;
+
+    private List<String> imgsGaleria = new ArrayList<>();
 
     // --- Campos derivados ---
 

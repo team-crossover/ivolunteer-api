@@ -50,4 +50,5 @@ public class Evento {
     @ManyToMany
     private List<Voluntario> confirmados = new ArrayList<>();
 
+    private String img;
 }

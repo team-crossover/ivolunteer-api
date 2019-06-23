@@ -7,6 +7,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OngRepository extends JpaRepository<Ong, Long> {
 
-//    Optional<Ong> findByUserId(Long idOwner);
-
 }

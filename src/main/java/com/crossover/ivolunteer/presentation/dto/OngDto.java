@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +54,10 @@ public class OngDto {
 
     private List<Long> idsSeguidores;
 
+    private String imgPerfil;
+
+    private List<String> imgsGaleria = new ArrayList<>();
+
     public OngDto(Ong ong) {
         this.id = ong.getId();
         this.nome = ong.getNome();
@@ -68,6 +73,8 @@ public class OngDto {
         this.endereco = new EnderecoDto(ong.getEndereco());
         this.idsEventos = ong.getEventos().stream().map(Evento::getId).collect(Collectors.toList());
         this.idsSeguidores = ong.getSeguidores().stream().map(Voluntario::getId).collect(Collectors.toList());
+        this.imgPerfil = ong.getImgPerfil();
+        this.imgsGaleria = ong.getImgsGaleria();
     }
 
 }

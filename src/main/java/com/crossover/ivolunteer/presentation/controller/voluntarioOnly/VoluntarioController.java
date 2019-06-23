@@ -19,7 +19,6 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,15 +52,8 @@ public class VoluntarioController {
         Usuario usuario = getAuthenticatedUsuarioVoluntario(request);
 
         Voluntario antigoVoluntario = usuario.getVoluntario();
-        Voluntario voluntario = Voluntario.builder()
-                .id(antigoVoluntario.getId())
-                .nome(novoVoluntarioDto.getNome())
-                .email(novoVoluntarioDto.getEmail())
-                .areasInteressadas(novoVoluntarioDto.getAreasInteressadas())
-                .dataCriacao(LocalDateTime.now())
-                .dataNascimento(novoVoluntarioDto.getDataNascimento())
-                .build();
-        voluntario = voluntarioService.save(voluntario);
+        novoVoluntarioDto.setId(antigoVoluntario.getId());
+        Voluntario voluntario = novoVoluntarioDto.toVoluntario(voluntarioService);
 
         if (novoVoluntarioDto.getUsername() != null)
             usuario.setUsername(novoVoluntarioDto.getUsername());
@@ -72,9 +64,7 @@ public class VoluntarioController {
         voluntario.setUsuario(usuario);
         voluntario = voluntarioService.save(voluntario);
 
-        NovoVoluntarioDto voluntCriado = new NovoVoluntarioDto(voluntario);
-        voluntCriado.setSenha(novoVoluntarioDto.getSenha());
-        return voluntCriado;
+        return new NovoVoluntarioDto(voluntario, novoVoluntarioDto.getSenha());
     }
 
     @PostMapping(ApiPaths.V1.VOLUNTARIO_PREFIX + "/eventos/{idEvento}/confirmar")

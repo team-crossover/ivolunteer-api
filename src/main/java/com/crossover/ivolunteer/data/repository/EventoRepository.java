@@ -7,6 +7,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EventoRepository extends JpaRepository<Evento, Long> {
 
-//    Optional<Ong> findByUserId(Long idOwner);
-
 }

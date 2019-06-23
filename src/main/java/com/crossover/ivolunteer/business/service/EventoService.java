@@ -12,8 +12,4 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class EventoService extends EntityServiceBase<Evento, Long, EventoRepository> {
 
-//    everyone Usuario findByGoogleId(String googleId) {
-//        return repository.findByGoogleId(googleId).orElse(null);
-//    }
-
 }

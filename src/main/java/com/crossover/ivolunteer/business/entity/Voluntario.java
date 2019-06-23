@@ -43,9 +43,7 @@ public class Voluntario {
     @Builder.Default
     private List<Ong> ongsSeguidas = new ArrayList<>();
 
-
-//    TODO: Adicionar suporte a imagens
-//    private Imagem imgPerfil;
+    private String imgPerfil;
 
     // --- Campos derivados ---
 

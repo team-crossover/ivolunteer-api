@@ -1,6 +1,8 @@
 package com.crossover.ivolunteer.presentation.dto;
 
+import com.crossover.ivolunteer.business.entity.Endereco;
 import com.crossover.ivolunteer.business.entity.Evento;
+import com.crossover.ivolunteer.business.entity.Ong;
 import com.crossover.ivolunteer.business.entity.Voluntario;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -42,6 +44,8 @@ public class EventoDto {
 
     private List<String> areas = new ArrayList<>();
 
+    private String img;
+
     private List<Long> idsVoluntariosConfirmados = new ArrayList<>();
 
     public EventoDto(Evento evento) {
@@ -53,7 +57,22 @@ public class EventoDto {
         this.dataCriacao = evento.getDataCriacao();
         this.dataRealizacao = evento.getDataRealizacao();
         this.areas = evento.getAreas();
+        this.img = evento.getImg();
         this.idsVoluntariosConfirmados = evento.getConfirmados().stream().map(Voluntario::getId).collect(Collectors.toList());
+    }
+
+    public Evento toEntity(Ong ong, Endereco endereco) {
+        return Evento.builder()
+                .id(id)
+                .ong(ong)
+                .nome(getNome())
+                .descricao(getDescricao())
+                .local(endereco)
+                .dataCriacao(LocalDateTime.now())
+                .dataRealizacao(getDataRealizacao())
+                .areas(getAreas())
+                .img(getImg())
+                .build();
     }
 
 }

@@ -2,7 +2,6 @@ package com.crossover.ivolunteer.presentation.controller.everyone;
 
 import com.crossover.ivolunteer.business.entity.Usuario;
 import com.crossover.ivolunteer.business.entity.Voluntario;
-import com.crossover.ivolunteer.business.enums.TipoUsuarioEnum;
 import com.crossover.ivolunteer.business.service.UsuarioService;
 import com.crossover.ivolunteer.business.service.VoluntarioService;
 import com.crossover.ivolunteer.presentation.constants.ApiPaths;
@@ -16,7 +15,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -53,29 +51,9 @@ public class VoluntariosController {
         if (usuario != null)
             throw new HttpClientErrorException(HttpStatus.CONFLICT, "Username already exists");
 
-        Voluntario voluntario = Voluntario.builder()
-                .nome(novoVoluntarioDto.getNome())
-                .email(novoVoluntarioDto.getEmail())
-                .areasInteressadas(novoVoluntarioDto.getAreasInteressadas())
-                .dataCriacao(LocalDateTime.now())
-                .dataNascimento(novoVoluntarioDto.getDataNascimento())
-                .build();
-        voluntario = voluntarioService.save(voluntario);
-
-        usuario = Usuario.builder()
-                .username(novoVoluntarioDto.getUsername())
-                .senha(passwordEncoder.encode(novoVoluntarioDto.getSenha()))
-                .tipo(TipoUsuarioEnum.VOLUNTARIO)
-                .voluntario(voluntario)
-                .build();
-        usuario = usuarioService.save(usuario);
-
-        voluntario.setUsuario(usuario);
-        voluntario = voluntarioService.save(voluntario);
-
-        NovoVoluntarioDto voluntCriado = new NovoVoluntarioDto(voluntario);
-        voluntCriado.setSenha(novoVoluntarioDto.getSenha());
-        return voluntCriado;
+        Voluntario voluntario = novoVoluntarioDto.toVoluntario(voluntarioService);
+        usuario = novoVoluntarioDto.toUsuario(voluntario, passwordEncoder, usuarioService, voluntarioService);
+        return new NovoVoluntarioDto(voluntario, novoVoluntarioDto.getSenha());
     }
 
 }

@@ -7,6 +7,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PostagemRepository extends JpaRepository<Postagem, Long> {
 
-//    Optional<Ong> findByUserId(Long idOwner);
-
 }

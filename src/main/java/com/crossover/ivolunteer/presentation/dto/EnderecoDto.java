@@ -14,6 +14,8 @@ import javax.validation.constraints.NotBlank;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EnderecoDto {
 
+    private Long id;
+
     @NotBlank
     private String uf;
 
@@ -32,6 +34,7 @@ public class EnderecoDto {
     private String complemento2;
 
     public EnderecoDto(Endereco endereco) {
+        this.id = endereco.getId();
         this.uf = endereco.getUf();
         this.cidade = endereco.getCidade();
         this.cep = endereco.getCep();
@@ -40,5 +43,16 @@ public class EnderecoDto {
         this.complemento2 = endereco.getComplemento2();
     }
 
+    public Endereco toEntity() {
+        return Endereco.builder()
+                .id(id)
+                .uf(getUf())
+                .cidade(getCidade())
+                .cep(getCep())
+                .bairro(getBairro())
+                .complemento1(getComplemento1())
+                .complemento2(getComplemento2())
+                .build();
+    }
 
 }
