@@ -17,7 +17,6 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -44,12 +43,6 @@ public class OngsController {
         return new OngDto(ong);
     }
 
-    static class OngComparatorBySeguidores implements Comparator<Ong> {
-        public int compare(Ong c1, Ong c2) {
-            return c1.getSeguidores().size() - c2.getSeguidores().size();
-        }
-    }
-
     @GetMapping(ApiPaths.V1.ONGS_PREFIX)
     private Collection<OngDto> getAll(@RequestParam(name = "nome", required = false) String nome,
                                       @RequestParam(name = "areas", required = false) String[] areas) {
@@ -62,7 +55,7 @@ public class OngsController {
         if (areas != null && areas.length > 0) {
             ongs = ongs.filter(o -> ArrayUtils.containsAny(o.getAreas().toArray(), areas));
         }
-        ongs = ongs.sorted(new OngComparatorBySeguidores());
+        ongs = ongService.sort(ongs);
         return ongs.map(OngDto::new).collect(Collectors.toList());
     }
 

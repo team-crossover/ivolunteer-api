@@ -15,7 +15,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,12 +31,6 @@ public class EventosController {
         if (evento == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento not found");
         return new EventoDto(evento);
-    }
-
-    static class EventoComparatorByConfirmados implements Comparator<Evento> {
-        public int compare(Evento c1, Evento c2) {
-            return c1.getConfirmados().size() - c2.getConfirmados().size();
-        }
     }
 
     @GetMapping(ApiPaths.V1.EVENTOS_PREFIX)
@@ -70,7 +63,7 @@ public class EventosController {
                 eventos = eventos.filter(e -> !e.getDataRealizacao().isBefore(now));
             }
         }
-        eventos = eventos.sorted(new EventoComparatorByConfirmados());
+        eventos = eventoService.sort(eventos);
         return eventos.map(EventoDto::new).collect(Collectors.toList());
     }
 
