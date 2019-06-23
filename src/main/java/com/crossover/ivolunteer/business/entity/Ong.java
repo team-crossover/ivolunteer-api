@@ -59,6 +59,8 @@ public class Ong {
 
     private String imgPerfil;
 
+    @Builder.Default
+    @ElementCollection
     private List<String> imgsGaleria = new ArrayList<>();
 
     // --- Campos derivados ---
