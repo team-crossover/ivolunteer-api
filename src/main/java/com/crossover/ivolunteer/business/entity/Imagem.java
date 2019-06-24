@@ -5,7 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 @Data
 @Builder
@@ -19,7 +23,7 @@ public class Imagem {
     @GeneratedValue
     private Long id;
 
-    @Lob
+    @Size(max = 2147483646)
     private String src;
 
 }
