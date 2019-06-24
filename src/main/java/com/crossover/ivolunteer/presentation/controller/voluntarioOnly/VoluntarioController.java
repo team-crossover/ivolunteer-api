@@ -2,10 +2,7 @@ package com.crossover.ivolunteer.presentation.controller.voluntarioOnly;
 
 import com.crossover.ivolunteer.business.entity.*;
 import com.crossover.ivolunteer.business.enums.TipoUsuarioEnum;
-import com.crossover.ivolunteer.business.service.EventoService;
-import com.crossover.ivolunteer.business.service.OngService;
-import com.crossover.ivolunteer.business.service.UsuarioService;
-import com.crossover.ivolunteer.business.service.VoluntarioService;
+import com.crossover.ivolunteer.business.service.*;
 import com.crossover.ivolunteer.presentation.constants.ApiPaths;
 import com.crossover.ivolunteer.presentation.dto.EventoDto;
 import com.crossover.ivolunteer.presentation.dto.NovoVoluntarioDto;
@@ -35,6 +32,9 @@ public class VoluntarioController {
     private VoluntarioService voluntarioService;
 
     @Autowired
+    private ImagemService imagemService;
+
+    @Autowired
     private OngService ongService;
 
     @Autowired
@@ -53,7 +53,14 @@ public class VoluntarioController {
 
         Voluntario antigoVoluntario = usuario.getVoluntario();
         novoVoluntarioDto.setId(antigoVoluntario.getId());
-        Voluntario voluntario = novoVoluntarioDto.toVoluntario(voluntarioService);
+        Voluntario voluntario = novoVoluntarioDto.toVoluntario(voluntarioService, imagemService);
+
+        // Salva a imagem caso veio com imagem.
+        if (novoVoluntarioDto.getSrcImgPerfil() != null) {
+            Imagem img = Imagem.builder().src(novoVoluntarioDto.getSrcImgPerfil()).build();
+            img = imagemService.save(img);
+            novoVoluntarioDto.setIdImgPerfil(img.getId());
+        }
 
         if (novoVoluntarioDto.getUsername() != null)
             usuario.setUsername(novoVoluntarioDto.getUsername());

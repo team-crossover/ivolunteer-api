@@ -2,10 +2,7 @@ package com.crossover.ivolunteer.presentation.controller.ongOnly;
 
 import com.crossover.ivolunteer.business.entity.*;
 import com.crossover.ivolunteer.business.enums.TipoUsuarioEnum;
-import com.crossover.ivolunteer.business.service.EnderecoService;
-import com.crossover.ivolunteer.business.service.EventoService;
-import com.crossover.ivolunteer.business.service.OngService;
-import com.crossover.ivolunteer.business.service.UsuarioService;
+import com.crossover.ivolunteer.business.service.*;
 import com.crossover.ivolunteer.presentation.constants.ApiPaths;
 import com.crossover.ivolunteer.presentation.dto.EventoDto;
 import com.crossover.ivolunteer.presentation.dto.NovaOngDto;
@@ -40,6 +37,9 @@ public class OngController {
     private EnderecoService enderecoService;
 
     @Autowired
+    private ImagemService imagemService;
+
+    @Autowired
     private JWTHttpService jwtHttpService;
 
     @Autowired
@@ -52,13 +52,20 @@ public class OngController {
         Ong antigaOng = usuario.getOng();
         novaOngDto.setId(antigaOng.getId());
 
-        Endereco antigoEndereco = antigaOng.getEndereco();
         if (novaOngDto.getEndereco() != null) {
+            Endereco antigoEndereco = antigaOng.getEndereco();
             novaOngDto.getEndereco().setId(antigoEndereco == null ? null : antigoEndereco.getId());
             enderecoService.save(novaOngDto.getEndereco().toEntity());
         }
 
-        Ong ong = ongService.save(novaOngDto.toOng(ongService, enderecoService));
+        // Salva a imagem caso veio com imagem.
+        if (novaOngDto.getSrcImgPerfil() != null) {
+            Imagem img = Imagem.builder().src(novaOngDto.getSrcImgPerfil()).build();
+            img = imagemService.save(img);
+            novaOngDto.setIdImgPerfil(img.getId());
+        }
+
+        Ong ong = ongService.save(novaOngDto.toOng(ongService, enderecoService, imagemService));
 
         if (novaOngDto.getUsername() != null)
             usuario.setUsername(novaOngDto.getUsername());
@@ -90,10 +97,18 @@ public class OngController {
             eventoDto.setIdOng(ong.getId());
         }
 
+        // Salva a imagem caso veio com imagem.
+        if (eventoDto.getSrcImg() != null) {
+            Imagem img = Imagem.builder().src(eventoDto.getSrcImg()).build();
+            img = imagemService.save(img);
+            eventoDto.setIdImg(img.getId());
+        }
+
+        Imagem imagem = imagemService.findById(eventoDto.getIdImg());
         Endereco endereco = eventoDto.getLocal().toEntity();
         endereco = enderecoService.save(endereco);
 
-        Evento evento = eventoDto.toEntity(ong, endereco);
+        Evento evento = eventoDto.toEntity(ong, endereco, imagem);
         evento = eventoService.save(evento);
 
         ong.getEventos().add(evento);
@@ -131,10 +146,18 @@ public class OngController {
         if (!Objects.equals(antigoEvento.getOng().getId(), ong.getId()))
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Specified Event doesn't belong to the authenticated user's Ong");
 
+        // Salva a imagem caso veio com imagem.
+        if (eventoDto.getSrcImg() != null) {
+            Imagem img = Imagem.builder().src(eventoDto.getSrcImg()).build();
+            img = imagemService.save(img);
+            eventoDto.setIdImg(img.getId());
+        }
+
+        Imagem imagem = imagemService.findById(eventoDto.getIdImg());
         Endereco endereco = eventoDto.getLocal().toEntity();
         endereco = enderecoService.save(endereco);
 
-        Evento evento = eventoDto.toEntity(ong, endereco);
+        Evento evento = eventoDto.toEntity(ong, endereco, imagem);
         evento.setId(id);
         evento = eventoService.save(evento);
 

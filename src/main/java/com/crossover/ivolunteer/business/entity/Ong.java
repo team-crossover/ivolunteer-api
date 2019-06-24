@@ -57,8 +57,8 @@ public class Ong {
     @Size(max = 100)
     private String urlWebsite;
 
-    @Lob
-    private String imgPerfil;
+    @OneToOne(orphanRemoval = true)
+    private Imagem imgPerfil;
 
     // --- Campos derivados ---
 

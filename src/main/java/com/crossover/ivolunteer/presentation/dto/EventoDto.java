@@ -1,9 +1,6 @@
 package com.crossover.ivolunteer.presentation.dto;
 
-import com.crossover.ivolunteer.business.entity.Endereco;
-import com.crossover.ivolunteer.business.entity.Evento;
-import com.crossover.ivolunteer.business.entity.Ong;
-import com.crossover.ivolunteer.business.entity.Voluntario;
+import com.crossover.ivolunteer.business.entity.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -44,7 +41,10 @@ public class EventoDto {
 
     private List<String> areas = new ArrayList<>();
 
-    private String img;
+    private Long idImg;
+
+    // Passado apenas ao enviar novo evento, não é preenchido ao retornar.
+    private String srcImg;
 
     private List<Long> idsVoluntariosConfirmados = new ArrayList<>();
 
@@ -57,11 +57,11 @@ public class EventoDto {
         this.dataCriacao = evento.getDataCriacao();
         this.dataRealizacao = evento.getDataRealizacao();
         this.areas = evento.getAreas();
-        this.img = evento.getImg();
+        this.idImg = evento.getImg() == null ? null : evento.getImg().getId();
         this.idsVoluntariosConfirmados = evento.getConfirmados().stream().map(Voluntario::getId).collect(Collectors.toList());
     }
 
-    public Evento toEntity(Ong ong, Endereco endereco) {
+    public Evento toEntity(Ong ong, Endereco endereco, Imagem img) {
         return Evento.builder()
                 .id(id)
                 .ong(ong)
@@ -71,7 +71,7 @@ public class EventoDto {
                 .dataCriacao(LocalDateTime.now())
                 .dataRealizacao(getDataRealizacao())
                 .areas(getAreas())
-                .img(getImg())
+                .img(img)
                 .build();
     }
 

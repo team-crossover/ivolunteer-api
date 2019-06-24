@@ -5,6 +5,7 @@ import com.crossover.ivolunteer.business.entity.Ong;
 import com.crossover.ivolunteer.business.entity.Usuario;
 import com.crossover.ivolunteer.business.enums.TipoUsuarioEnum;
 import com.crossover.ivolunteer.business.service.EnderecoService;
+import com.crossover.ivolunteer.business.service.ImagemService;
 import com.crossover.ivolunteer.business.service.OngService;
 import com.crossover.ivolunteer.business.service.UsuarioService;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -57,7 +58,10 @@ public class NovaOngDto {
 
     private EnderecoDto endereco;
 
-    private String imgPerfil;
+    private Long idImgPerfil;
+
+    // Passado apenas ao enviar nova ONG, não é preenchido ao retornar.
+    private String srcImgPerfil;
 
     private List<String> imgsGaleria = new ArrayList<>();
 
@@ -74,7 +78,7 @@ public class NovaOngDto {
         this.urlFacebook = ong.getUrlFacebook();
         this.urlWebsite = ong.getUrlWebsite();
         this.endereco = new EnderecoDto(ong.getEndereco());
-        this.imgPerfil = ong.getImgPerfil();
+        this.idImgPerfil = ong.getImgPerfil() == null ? null : ong.getImgPerfil().getId();
     }
 
     public NovaOngDto(Ong ong, String senha) {
@@ -90,10 +94,10 @@ public class NovaOngDto {
         this.urlFacebook = ong.getUrlFacebook();
         this.urlWebsite = ong.getUrlWebsite();
         this.endereco = new EnderecoDto(ong.getEndereco());
-        this.imgPerfil = ong.getImgPerfil();
+        this.idImgPerfil = ong.getImgPerfil() == null ? null : ong.getImgPerfil().getId();
     }
 
-    public Ong toOng(OngService ongService, EnderecoService enderecoService) {
+    public Ong toOng(OngService ongService, EnderecoService enderecoService, ImagemService imagemService) {
         Endereco endereco = null;
         if (getEndereco() != null) {
             endereco = getEndereco().toEntity();
@@ -112,7 +116,7 @@ public class NovaOngDto {
                 .telefone(getTelefone())
                 .urlFacebook(getUrlFacebook())
                 .urlWebsite(getUrlWebsite())
-                .imgPerfil(getImgPerfil())
+                .imgPerfil(getIdImgPerfil() == null ? null : imagemService.findById(getIdImgPerfil()))
                 .build();
         return ongService.save(ong);
     }

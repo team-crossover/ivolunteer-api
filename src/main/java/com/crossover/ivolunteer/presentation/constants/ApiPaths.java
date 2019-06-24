@@ -40,6 +40,7 @@ public class ApiPaths {
         public static final String ONGS_PREFIX = PUBLIC_PREFIX + "/ongs";
         public static final String VOLUNTARIOS_PREFIX = PUBLIC_PREFIX + "/voluntarios";
         public static final String EVENTOS_PREFIX = PUBLIC_PREFIX + "/eventos";
+        public static final String IMAGENS_PREFIX = PUBLIC_PREFIX + "/imagens";
 
     }
 }

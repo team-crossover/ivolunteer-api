@@ -43,8 +43,8 @@ public class Voluntario {
     @Builder.Default
     private List<Ong> ongsSeguidas = new ArrayList<>();
 
-    @Lob
-    private String imgPerfil;
+    @OneToOne(orphanRemoval = true)
+    private Imagem imgPerfil;
 
     // --- Campos derivados ---
 
