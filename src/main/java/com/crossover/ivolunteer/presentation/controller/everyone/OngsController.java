@@ -8,7 +8,6 @@ import com.crossover.ivolunteer.business.service.UsuarioService;
 import com.crossover.ivolunteer.presentation.constants.ApiPaths;
 import com.crossover.ivolunteer.presentation.dto.NovaOngDto;
 import com.crossover.ivolunteer.presentation.dto.OngDto;
-import com.crossover.ivolunteer.util.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,8 +16,6 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 public class OngsController {
@@ -46,17 +43,7 @@ public class OngsController {
     @GetMapping(ApiPaths.V1.ONGS_PREFIX)
     private Collection<OngDto> getAll(@RequestParam(name = "nome", required = false) String nome,
                                       @RequestParam(name = "areas", required = false) String[] areas) {
-        // TODO: Add pagination to this
-        Stream<Ong> ongs = ongService.findAll().stream();
-        if (nome != null && nome.length() > 0) {
-            String finalNome = nome.toLowerCase();
-            ongs = ongs.filter(o -> o.getNome().toLowerCase().contains(finalNome));
-        }
-        if (areas != null && areas.length > 0) {
-            ongs = ongs.filter(o -> ArrayUtils.containsAny(o.getAreas().toArray(), areas));
-        }
-        ongs = ongService.sort(ongs);
-        return ongs.map(OngDto::new).collect(Collectors.toList());
+        return ongService.getAllDtoFiltered(nome, areas);
     }
 
     @PostMapping(ApiPaths.V1.ONGS_PREFIX)
