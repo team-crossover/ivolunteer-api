@@ -60,11 +60,6 @@ public class Ong {
     @Lob
     private String imgPerfil;
 
-    @Lob
-    @Builder.Default
-    @ElementCollection
-    private List<String> imgsGaleria = new ArrayList<>();
-
     // --- Campos derivados ---
 
     @OneToOne(mappedBy = "ong")

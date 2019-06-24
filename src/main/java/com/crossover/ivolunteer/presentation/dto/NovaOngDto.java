@@ -75,7 +75,6 @@ public class NovaOngDto {
         this.urlWebsite = ong.getUrlWebsite();
         this.endereco = new EnderecoDto(ong.getEndereco());
         this.imgPerfil = ong.getImgPerfil();
-        this.imgsGaleria = ong.getImgsGaleria();
     }
 
     public NovaOngDto(Ong ong, String senha) {
@@ -92,7 +91,6 @@ public class NovaOngDto {
         this.urlWebsite = ong.getUrlWebsite();
         this.endereco = new EnderecoDto(ong.getEndereco());
         this.imgPerfil = ong.getImgPerfil();
-        this.imgsGaleria = ong.getImgsGaleria();
     }
 
     public Ong toOng(OngService ongService, EnderecoService enderecoService) {
@@ -115,7 +113,6 @@ public class NovaOngDto {
                 .urlFacebook(getUrlFacebook())
                 .urlWebsite(getUrlWebsite())
                 .imgPerfil(getImgPerfil())
-                .imgsGaleria(getImgsGaleria())
                 .build();
         return ongService.save(ong);
     }
