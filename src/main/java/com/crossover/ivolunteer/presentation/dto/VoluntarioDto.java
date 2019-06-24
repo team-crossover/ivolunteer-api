@@ -49,7 +49,7 @@ public class VoluntarioDto {
         this.dataCriacao = voluntario.getDataCriacao();
         this.dataNascimento = voluntario.getDataNascimento();
         this.areasInteressadas = voluntario.getAreasInteressadas();
-        this.idImgPerfil = voluntario.getImgPerfil() == null ? null : voluntario.getImgPerfil().getId();
+        this.idImgPerfil = voluntario.getIdImgPerfil();
         this.idsOngsSeguidas = voluntario.getOngsSeguidas().stream().map(Ong::getId).collect(Collectors.toList());
         this.idsEventosConfirmados = voluntario.getEventosConfirmados().stream().map(Evento::getId).collect(Collectors.toList());
     }

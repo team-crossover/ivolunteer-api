@@ -65,22 +65,6 @@ public class NovaOngDto {
 
     private List<String> imgsGaleria = new ArrayList<>();
 
-    public NovaOngDto(Ong ong) {
-        this.id = ong.getId();
-        this.username = ong.getUsuario().getUsername();
-        this.senha = null; // Não tem como retornar a senha porque armazenamos apenas a hash.
-        this.nome = ong.getNome();
-        this.descricao = ong.getDescricao();
-        this.doacoes = ong.getDoacoes();
-        this.dataFundacao = ong.getDataFundacao();
-        this.telefone = ong.getTelefone();
-        this.email = ong.getEmail();
-        this.urlFacebook = ong.getUrlFacebook();
-        this.urlWebsite = ong.getUrlWebsite();
-        this.endereco = new EnderecoDto(ong.getEndereco());
-        this.idImgPerfil = ong.getImgPerfil() == null ? null : ong.getImgPerfil().getId();
-    }
-
     public NovaOngDto(Ong ong, String senha) {
         this.id = ong.getId();
         this.username = ong.getUsuario().getUsername();
@@ -94,7 +78,7 @@ public class NovaOngDto {
         this.urlFacebook = ong.getUrlFacebook();
         this.urlWebsite = ong.getUrlWebsite();
         this.endereco = new EnderecoDto(ong.getEndereco());
-        this.idImgPerfil = ong.getImgPerfil() == null ? null : ong.getImgPerfil().getId();
+        this.idImgPerfil = ong.getIdImgPerfil();
     }
 
     public Ong toOng(OngService ongService, EnderecoService enderecoService, ImagemService imagemService) {
@@ -117,6 +101,7 @@ public class NovaOngDto {
                 .urlFacebook(getUrlFacebook())
                 .urlWebsite(getUrlWebsite())
                 .imgPerfil(getIdImgPerfil() == null ? null : imagemService.findById(getIdImgPerfil()))
+                .idImgPerfil(getIdImgPerfil())
                 .build();
         return ongService.save(ong);
     }

@@ -70,7 +70,7 @@ public class OngDto {
         this.endereco = new EnderecoDto(ong.getEndereco());
         this.idsEventos = ong.getEventos().stream().map(Evento::getId).collect(Collectors.toList());
         this.idsSeguidores = ong.getSeguidores().stream().map(Voluntario::getId).collect(Collectors.toList());
-        this.idImgPerfil = ong.getImgPerfil() == null ? null : ong.getImgPerfil().getId();
+        this.idImgPerfil = ong.getIdImgPerfil();
     }
 
 }

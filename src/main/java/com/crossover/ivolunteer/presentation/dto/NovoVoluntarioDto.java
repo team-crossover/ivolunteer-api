@@ -54,7 +54,7 @@ public class NovoVoluntarioDto {
         this.email = voluntario.getEmail();
         this.dataNascimento = voluntario.getDataNascimento();
         this.areasInteressadas = voluntario.getAreasInteressadas();
-        this.idImgPerfil = voluntario.getImgPerfil() == null ? null : voluntario.getImgPerfil().getId();
+        this.idImgPerfil = voluntario.getIdImgPerfil();
     }
 
     public Voluntario toVoluntario(VoluntarioService voluntarioService, ImagemService imagemService) {
@@ -66,6 +66,7 @@ public class NovoVoluntarioDto {
                 .dataCriacao(LocalDateTime.now())
                 .dataNascimento(getDataNascimento())
                 .imgPerfil(getIdImgPerfil() == null ? null : imagemService.findById(getIdImgPerfil()))
+                .idImgPerfil(getIdImgPerfil())
                 .build();
         return voluntarioService.save(voluntario);
     }

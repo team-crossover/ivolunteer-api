@@ -57,7 +57,7 @@ public class EventoDto {
         this.dataCriacao = evento.getDataCriacao();
         this.dataRealizacao = evento.getDataRealizacao();
         this.areas = evento.getAreas();
-        this.idImg = evento.getImg() == null ? null : evento.getImg().getId();
+        this.idImg = evento.getIdImg();
         this.idsVoluntariosConfirmados = evento.getConfirmados().stream().map(Voluntario::getId).collect(Collectors.toList());
     }
 
@@ -72,6 +72,7 @@ public class EventoDto {
                 .dataRealizacao(getDataRealizacao())
                 .areas(getAreas())
                 .img(img)
+                .idImg(getIdImg())
                 .build();
     }
 

@@ -46,6 +46,8 @@ public class Voluntario {
     @OneToOne(orphanRemoval = true)
     private Imagem imgPerfil;
 
+    private Long idImgPerfil;
+
     // --- Campos derivados ---
 
     @OneToOne(mappedBy = "voluntario")

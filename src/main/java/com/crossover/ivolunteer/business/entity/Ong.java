@@ -60,6 +60,8 @@ public class Ong {
     @OneToOne(orphanRemoval = true)
     private Imagem imgPerfil;
 
+    private Long idImgPerfil;
+
     // --- Campos derivados ---
 
     @OneToOne(mappedBy = "ong")
