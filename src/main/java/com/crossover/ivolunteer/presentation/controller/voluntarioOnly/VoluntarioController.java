@@ -53,7 +53,6 @@ public class VoluntarioController {
 
         Voluntario antigoVoluntario = usuario.getVoluntario();
         novoVoluntarioDto.setId(antigoVoluntario.getId());
-        Voluntario voluntario = novoVoluntarioDto.toVoluntario(voluntarioService, imagemService);
 
         // Salva a imagem caso veio com imagem.
         if (novoVoluntarioDto.getSrcImgPerfil() != null) {
@@ -61,6 +60,8 @@ public class VoluntarioController {
             img = imagemService.save(img);
             novoVoluntarioDto.setIdImgPerfil(img.getId());
         }
+
+        Voluntario voluntario = novoVoluntarioDto.toVoluntario(voluntarioService, imagemService);
 
         if (novoVoluntarioDto.getUsername() != null)
             usuario.setUsername(novoVoluntarioDto.getUsername());
