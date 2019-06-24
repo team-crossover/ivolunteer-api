@@ -57,7 +57,7 @@ public class Ong {
     @Size(max = 100)
     private String urlWebsite;
 
-    @OneToOne(orphanRemoval = true)
+    @OneToOne(orphanRemoval = true, fetch = FetchType.LAZY)
     private Imagem imgPerfil;
 
     private Long idImgPerfil;

@@ -23,7 +23,7 @@ public class Imagem {
     @GeneratedValue
     private Long id;
 
-    @Size(max = 2147483646)
+    @Size(max = 10485760)
     private String src;
 
 }

@@ -43,7 +43,7 @@ public class Voluntario {
     @Builder.Default
     private List<Ong> ongsSeguidas = new ArrayList<>();
 
-    @OneToOne(orphanRemoval = true)
+    @OneToOne(orphanRemoval = true, fetch = FetchType.LAZY)
     private Imagem imgPerfil;
 
     private Long idImgPerfil;
