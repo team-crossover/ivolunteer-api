@@ -74,18 +74,8 @@ public class OngController {
         Usuario usuario = getAuthenticatedUsuarioOng(request);
         Ong ong = usuario.getOng();
 
-        if (eventoDto.getId() != null)
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "New Event shouldn't have ID");
-
-        if (eventoDto.getIdOng() != null) {
-            if (!Objects.equals(eventoDto.getIdOng(), ong.getId())) {
-                throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "New Event's Ong ID should be null or match the authenticated user's Ong ID");
-            } else {
-                eventoDto.setIdOng(ong.getId());
-            }
-        } else {
-            eventoDto.setIdOng(ong.getId());
-        }
+        eventoDto.setId(null);
+        eventoDto.setIdOng(ong.getId());
 
         Endereco endereco = eventoDto.getLocal().toEntity();
         endereco = enderecoService.save(endereco);
