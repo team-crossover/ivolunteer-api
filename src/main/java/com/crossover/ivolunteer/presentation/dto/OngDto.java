@@ -53,7 +53,7 @@ public class OngDto {
 
     private List<Long> idsSeguidores;
 
-    private Long idImgPerfil;
+    private String imgPerfil;
 
     public OngDto(Ong ong) {
         this.id = ong.getId();
@@ -70,7 +70,7 @@ public class OngDto {
         this.endereco = new EnderecoDto(ong.getEndereco());
         this.idsEventos = ong.getEventos().stream().map(Evento::getId).collect(Collectors.toList());
         this.idsSeguidores = ong.getSeguidores().stream().map(Voluntario::getId).collect(Collectors.toList());
-        this.idImgPerfil = ong.getIdImgPerfil();
+        this.imgPerfil = ong.getImgPerfil();
     }
 
 }

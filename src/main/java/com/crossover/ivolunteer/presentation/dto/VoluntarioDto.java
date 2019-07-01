@@ -36,7 +36,7 @@ public class VoluntarioDto {
 
     private List<String> areasInteressadas;
 
-    private Long idImgPerfil;
+    private String imgPerfil;
 
     private List<Long> idsOngsSeguidas;
 
@@ -49,7 +49,7 @@ public class VoluntarioDto {
         this.dataCriacao = voluntario.getDataCriacao();
         this.dataNascimento = voluntario.getDataNascimento();
         this.areasInteressadas = voluntario.getAreasInteressadas();
-        this.idImgPerfil = voluntario.getIdImgPerfil();
+        this.imgPerfil = voluntario.getImgPerfil();
         this.idsOngsSeguidas = voluntario.getOngsSeguidas().stream().map(Ong::getId).collect(Collectors.toList());
         this.idsEventosConfirmados = voluntario.getEventosConfirmados().stream().map(Evento::getId).collect(Collectors.toList());
     }

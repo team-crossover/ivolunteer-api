@@ -50,9 +50,8 @@ public class Evento {
     @ManyToMany
     private List<Voluntario> confirmados = new ArrayList<>();
 
-    @OneToOne(orphanRemoval = true, fetch = FetchType.LAZY)
-    private Imagem img;
-
-    private Long idImg;
+    @Basic(fetch = FetchType.LAZY)
+    @Size(max = 10485760)
+    private String img;
 
 }

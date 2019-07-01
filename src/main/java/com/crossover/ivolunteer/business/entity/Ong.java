@@ -57,10 +57,9 @@ public class Ong {
     @Size(max = 100)
     private String urlWebsite;
 
-    @OneToOne(orphanRemoval = true, fetch = FetchType.LAZY)
-    private Imagem imgPerfil;
-
-    private Long idImgPerfil;
+    @Basic(fetch = FetchType.LAZY)
+    @Size(max = 10485760)
+    private String imgPerfil;
 
     // --- Campos derivados ---
 

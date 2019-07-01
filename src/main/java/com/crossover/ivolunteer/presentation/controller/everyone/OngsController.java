@@ -1,10 +1,8 @@
 package com.crossover.ivolunteer.presentation.controller.everyone;
 
-import com.crossover.ivolunteer.business.entity.Imagem;
 import com.crossover.ivolunteer.business.entity.Ong;
 import com.crossover.ivolunteer.business.entity.Usuario;
 import com.crossover.ivolunteer.business.service.EnderecoService;
-import com.crossover.ivolunteer.business.service.ImagemService;
 import com.crossover.ivolunteer.business.service.OngService;
 import com.crossover.ivolunteer.business.service.UsuarioService;
 import com.crossover.ivolunteer.presentation.constants.ApiPaths;
@@ -32,9 +30,6 @@ public class OngsController {
     private EnderecoService enderecoService;
 
     @Autowired
-    private ImagemService imagemService;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @GetMapping(ApiPaths.V1.ONGS_PREFIX + "/{id}")
@@ -57,14 +52,7 @@ public class OngsController {
         if (usuario != null)
             throw new HttpClientErrorException(HttpStatus.CONFLICT, "Username already exists");
 
-        // Salva a imagem caso veio com imagem.
-        if (novaOngDto.getSrcImgPerfil() != null) {
-            Imagem img = Imagem.builder().src(novaOngDto.getSrcImgPerfil()).build();
-            img = imagemService.save(img);
-            novaOngDto.setIdImgPerfil(img.getId());
-        }
-
-        Ong ong = novaOngDto.toOng(ongService, enderecoService, imagemService);
+        Ong ong = novaOngDto.toOng(ongService, enderecoService);
         usuario = novaOngDto.toUsuario(ong, passwordEncoder, usuarioService, ongService);
         return new NovaOngDto(ong, novaOngDto.getSenha());
     }

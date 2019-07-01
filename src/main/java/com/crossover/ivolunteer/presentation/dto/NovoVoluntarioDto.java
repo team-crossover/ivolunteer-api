@@ -3,7 +3,6 @@ package com.crossover.ivolunteer.presentation.dto;
 import com.crossover.ivolunteer.business.entity.Usuario;
 import com.crossover.ivolunteer.business.entity.Voluntario;
 import com.crossover.ivolunteer.business.enums.TipoUsuarioEnum;
-import com.crossover.ivolunteer.business.service.ImagemService;
 import com.crossover.ivolunteer.business.service.UsuarioService;
 import com.crossover.ivolunteer.business.service.VoluntarioService;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -41,10 +40,7 @@ public class NovoVoluntarioDto {
 
     private List<String> areasInteressadas;
 
-    private Long idImgPerfil;
-
-    // Passado apenas ao enviar novo voluntario, não é preenchido ao retornar.
-    private String srcImgPerfil;
+    private String imgPerfil;
 
     public NovoVoluntarioDto(Voluntario voluntario, String senha) {
         this.id = voluntario.getId();
@@ -54,10 +50,10 @@ public class NovoVoluntarioDto {
         this.email = voluntario.getEmail();
         this.dataNascimento = voluntario.getDataNascimento();
         this.areasInteressadas = voluntario.getAreasInteressadas();
-        this.idImgPerfil = voluntario.getIdImgPerfil();
+        this.imgPerfil = voluntario.getImgPerfil();
     }
 
-    public Voluntario toVoluntario(VoluntarioService voluntarioService, ImagemService imagemService) {
+    public Voluntario toVoluntario(VoluntarioService voluntarioService) {
         Voluntario voluntario = Voluntario.builder()
                 .id(getId())
                 .nome(getNome())
@@ -65,8 +61,7 @@ public class NovoVoluntarioDto {
                 .areasInteressadas(getAreasInteressadas())
                 .dataCriacao(LocalDateTime.now())
                 .dataNascimento(getDataNascimento())
-                .imgPerfil(getIdImgPerfil() == null ? null : imagemService.findById(getIdImgPerfil()))
-                .idImgPerfil(getIdImgPerfil())
+                .imgPerfil(getImgPerfil())
                 .build();
         return voluntarioService.save(voluntario);
     }

@@ -41,10 +41,7 @@ public class EventoDto {
 
     private List<String> areas = new ArrayList<>();
 
-    private Long idImg;
-
-    // Passado apenas ao enviar novo evento, não é preenchido ao retornar.
-    private String srcImg;
+    private String img;
 
     private List<Long> idsVoluntariosConfirmados = new ArrayList<>();
 
@@ -57,11 +54,11 @@ public class EventoDto {
         this.dataCriacao = evento.getDataCriacao();
         this.dataRealizacao = evento.getDataRealizacao();
         this.areas = evento.getAreas();
-        this.idImg = evento.getIdImg();
+        this.img = evento.getImg();
         this.idsVoluntariosConfirmados = evento.getConfirmados().stream().map(Voluntario::getId).collect(Collectors.toList());
     }
 
-    public Evento toEntity(Ong ong, Endereco endereco, Imagem img) {
+    public Evento toEntity(Ong ong, Endereco endereco) {
         return Evento.builder()
                 .id(id)
                 .ong(ong)
@@ -71,8 +68,7 @@ public class EventoDto {
                 .dataCriacao(LocalDateTime.now())
                 .dataRealizacao(getDataRealizacao())
                 .areas(getAreas())
-                .img(img)
-                .idImg(getIdImg())
+                .img(getImg())
                 .build();
     }
 

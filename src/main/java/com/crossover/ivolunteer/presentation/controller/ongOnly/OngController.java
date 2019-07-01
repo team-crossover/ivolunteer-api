@@ -37,9 +37,6 @@ public class OngController {
     private EnderecoService enderecoService;
 
     @Autowired
-    private ImagemService imagemService;
-
-    @Autowired
     private JWTHttpService jwtHttpService;
 
     @Autowired
@@ -58,14 +55,7 @@ public class OngController {
             enderecoService.save(novaOngDto.getEndereco().toEntity());
         }
 
-        // Salva a imagem caso veio com imagem.
-        if (novaOngDto.getSrcImgPerfil() != null) {
-            Imagem img = Imagem.builder().src(novaOngDto.getSrcImgPerfil()).build();
-            img = imagemService.save(img);
-            novaOngDto.setIdImgPerfil(img.getId());
-        }
-
-        Ong ong = ongService.save(novaOngDto.toOng(ongService, enderecoService, imagemService));
+        Ong ong = ongService.save(novaOngDto.toOng(ongService, enderecoService));
 
         if (novaOngDto.getUsername() != null)
             usuario.setUsername(novaOngDto.getUsername());
@@ -97,18 +87,10 @@ public class OngController {
             eventoDto.setIdOng(ong.getId());
         }
 
-        // Salva a imagem caso veio com imagem.
-        if (eventoDto.getSrcImg() != null) {
-            Imagem img = Imagem.builder().src(eventoDto.getSrcImg()).build();
-            img = imagemService.save(img);
-            eventoDto.setIdImg(img.getId());
-        }
-
-        Imagem imagem = imagemService.findById(eventoDto.getIdImg());
         Endereco endereco = eventoDto.getLocal().toEntity();
         endereco = enderecoService.save(endereco);
 
-        Evento evento = eventoDto.toEntity(ong, endereco, imagem);
+        Evento evento = eventoDto.toEntity(ong, endereco);
         evento = eventoService.save(evento);
 
         ong.getEventos().add(evento);
@@ -146,18 +128,10 @@ public class OngController {
         if (!Objects.equals(antigoEvento.getOng().getId(), ong.getId()))
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Specified Event doesn't belong to the authenticated user's Ong");
 
-        // Salva a imagem caso veio com imagem.
-        if (eventoDto.getSrcImg() != null) {
-            Imagem img = Imagem.builder().src(eventoDto.getSrcImg()).build();
-            img = imagemService.save(img);
-            eventoDto.setIdImg(img.getId());
-        }
-
-        Imagem imagem = imagemService.findById(eventoDto.getIdImg());
         Endereco endereco = eventoDto.getLocal().toEntity();
         endereco = enderecoService.save(endereco);
 
-        Evento evento = eventoDto.toEntity(ong, endereco, imagem);
+        Evento evento = eventoDto.toEntity(ong, endereco);
         evento.setId(id);
         evento = eventoService.save(evento);
 

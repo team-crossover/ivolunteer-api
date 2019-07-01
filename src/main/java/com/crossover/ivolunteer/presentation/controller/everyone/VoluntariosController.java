@@ -1,9 +1,7 @@
 package com.crossover.ivolunteer.presentation.controller.everyone;
 
-import com.crossover.ivolunteer.business.entity.Imagem;
 import com.crossover.ivolunteer.business.entity.Usuario;
 import com.crossover.ivolunteer.business.entity.Voluntario;
-import com.crossover.ivolunteer.business.service.ImagemService;
 import com.crossover.ivolunteer.business.service.UsuarioService;
 import com.crossover.ivolunteer.business.service.VoluntarioService;
 import com.crossover.ivolunteer.presentation.constants.ApiPaths;
@@ -30,9 +28,6 @@ public class VoluntariosController {
     private UsuarioService usuarioService;
 
     @Autowired
-    private ImagemService imagemService;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @GetMapping(ApiPaths.V1.VOLUNTARIOS_PREFIX + "/{id}")
@@ -56,14 +51,7 @@ public class VoluntariosController {
         if (usuario != null)
             throw new HttpClientErrorException(HttpStatus.CONFLICT, "Username already exists");
 
-        // Salva a imagem caso veio com imagem.
-        if (novoVoluntarioDto.getSrcImgPerfil() != null) {
-            Imagem img = Imagem.builder().src(novoVoluntarioDto.getSrcImgPerfil()).build();
-            img = imagemService.save(img);
-            novoVoluntarioDto.setIdImgPerfil(img.getId());
-        }
-
-        Voluntario voluntario = novoVoluntarioDto.toVoluntario(voluntarioService, imagemService);
+        Voluntario voluntario = novoVoluntarioDto.toVoluntario(voluntarioService);
         usuario = novoVoluntarioDto.toUsuario(voluntario, passwordEncoder, usuarioService, voluntarioService);
         return new NovoVoluntarioDto(voluntario, novoVoluntarioDto.getSenha());
     }

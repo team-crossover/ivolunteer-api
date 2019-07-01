@@ -32,9 +32,6 @@ public class VoluntarioController {
     private VoluntarioService voluntarioService;
 
     @Autowired
-    private ImagemService imagemService;
-
-    @Autowired
     private OngService ongService;
 
     @Autowired
@@ -54,14 +51,7 @@ public class VoluntarioController {
         Voluntario antigoVoluntario = usuario.getVoluntario();
         novoVoluntarioDto.setId(antigoVoluntario.getId());
 
-        // Salva a imagem caso veio com imagem.
-        if (novoVoluntarioDto.getSrcImgPerfil() != null) {
-            Imagem img = Imagem.builder().src(novoVoluntarioDto.getSrcImgPerfil()).build();
-            img = imagemService.save(img);
-            novoVoluntarioDto.setIdImgPerfil(img.getId());
-        }
-
-        Voluntario voluntario = novoVoluntarioDto.toVoluntario(voluntarioService, imagemService);
+        Voluntario voluntario = novoVoluntarioDto.toVoluntario(voluntarioService);
 
         if (novoVoluntarioDto.getUsername() != null)
             usuario.setUsername(novoVoluntarioDto.getUsername());
