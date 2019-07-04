@@ -30,7 +30,6 @@ public class NovaOngDto {
     @NotBlank
     private String username;
 
-    @NotBlank
     private String senha;
 
     @NotBlank

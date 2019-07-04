@@ -48,17 +48,25 @@ public class VoluntarioController {
                                      HttpServletRequest request) {
         Usuario usuario = getAuthenticatedUsuarioVoluntario(request);
 
-        Voluntario antigoVoluntario = usuario.getVoluntario();
-        novoVoluntarioDto.setId(antigoVoluntario.getId());
+        Voluntario voluntario = usuario.getVoluntario();
 
-        Voluntario voluntario = novoVoluntarioDto.toVoluntario(voluntarioService);
+        if (novoVoluntarioDto.getNome() != null)
+            voluntario.setNome(novoVoluntarioDto.getNome());
+        if (novoVoluntarioDto.getEmail() != null)
+            voluntario.setEmail(novoVoluntarioDto.getEmail());
+        if (novoVoluntarioDto.getDataNascimento() != null)
+            voluntario.setDataNascimento(novoVoluntarioDto.getDataNascimento());
+        if (novoVoluntarioDto.getAreasInteressadas() != null)
+            voluntario.setAreasInteressadas(novoVoluntarioDto.getAreasInteressadas());
+        if (novoVoluntarioDto.getImgPerfil() != null)
+            voluntario.setImgPerfil(novoVoluntarioDto.getImgPerfil());
 
-        if (novoVoluntarioDto.getUsername() != null)
-            usuario.setUsername(novoVoluntarioDto.getUsername());
         if (novoVoluntarioDto.getSenha() != null)
             usuario.setSenha(passwordEncoder.encode(novoVoluntarioDto.getSenha()));
-        usuario = usuarioService.save(usuario);
+        if (novoVoluntarioDto.getUsername() != null)
+            usuario.setUsername(novoVoluntarioDto.getUsername());
 
+        usuario = usuarioService.save(usuario);
         voluntario.setUsuario(usuario);
         voluntario = voluntarioService.save(voluntario);
 

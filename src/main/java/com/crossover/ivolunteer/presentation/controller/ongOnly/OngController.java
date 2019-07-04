@@ -2,7 +2,10 @@ package com.crossover.ivolunteer.presentation.controller.ongOnly;
 
 import com.crossover.ivolunteer.business.entity.*;
 import com.crossover.ivolunteer.business.enums.TipoUsuarioEnum;
-import com.crossover.ivolunteer.business.service.*;
+import com.crossover.ivolunteer.business.service.EnderecoService;
+import com.crossover.ivolunteer.business.service.EventoService;
+import com.crossover.ivolunteer.business.service.OngService;
+import com.crossover.ivolunteer.business.service.UsuarioService;
 import com.crossover.ivolunteer.presentation.constants.ApiPaths;
 import com.crossover.ivolunteer.presentation.dto.EventoDto;
 import com.crossover.ivolunteer.presentation.dto.NovaOngDto;
@@ -46,23 +49,66 @@ public class OngController {
     private NovaOngDto update(@Valid @RequestBody NovaOngDto novaOngDto, HttpServletRequest request) {
         Usuario usuario = getAuthenticatedUsuarioOng(request);
 
-        Ong antigaOng = usuario.getOng();
-        novaOngDto.setId(antigaOng.getId());
+        Ong ong = usuario.getOng();
+
+//        @NotBlank
+//        private String nome;
+//
+//        @NotBlank
+//        private String descricao;
+//
+//        private String doacoes;
+//
+//        @JsonFormat(pattern = ("MM/dd/yyyy"))
+//        private LocalDate dataFundacao;
+//
+//        private List<String> areas;
+//
+//        private String telefone;
+//
+//        private String email;
+//
+//        private String urlFacebook;
+//
+//        private String urlWebsite;
+//
+//        private EnderecoDto endereco;
+//
+//        private String imgPerfil;
+
+        if (novaOngDto.getNome() != null)
+            ong.setNome(novaOngDto.getNome());
+        if (novaOngDto.getDescricao() != null)
+            ong.setDescricao(novaOngDto.getDescricao());
+        if (novaOngDto.getDoacoes() != null)
+            ong.setDescricao(novaOngDto.getDoacoes());
+        if (novaOngDto.getDataFundacao() != null)
+            ong.setDataFundacao(novaOngDto.getDataFundacao());
+        if (novaOngDto.getAreas() != null)
+            ong.setAreas(novaOngDto.getAreas());
+        if (novaOngDto.getTelefone() != null)
+            ong.setTelefone(novaOngDto.getTelefone());
+        if (novaOngDto.getEmail() != null)
+            ong.setEmail(novaOngDto.getEmail());
+        if (novaOngDto.getUrlFacebook() != null)
+            ong.setUrlFacebook(novaOngDto.getUrlFacebook());
+        if (novaOngDto.getUrlWebsite() != null)
+            ong.setUrlWebsite(novaOngDto.getUrlWebsite());
+        if (novaOngDto.getImgPerfil() != null)
+            ong.setImgPerfil(novaOngDto.getImgPerfil());
 
         if (novaOngDto.getEndereco() != null) {
-            Endereco antigoEndereco = antigaOng.getEndereco();
+            Endereco antigoEndereco = ong.getEndereco();
             novaOngDto.getEndereco().setId(antigoEndereco == null ? null : antigoEndereco.getId());
-            enderecoService.save(novaOngDto.getEndereco().toEntity());
+            ong.setEndereco(enderecoService.save(novaOngDto.getEndereco().toEntity()));
         }
-
-        Ong ong = ongService.save(novaOngDto.toOng(ongService, enderecoService));
 
         if (novaOngDto.getUsername() != null)
             usuario.setUsername(novaOngDto.getUsername());
         if (novaOngDto.getSenha() != null)
             usuario.setSenha(passwordEncoder.encode(novaOngDto.getSenha()));
-        usuario = usuarioService.save(usuario);
 
+        usuario = usuarioService.save(usuario);
         ong.setUsuario(usuario);
         ong = ongService.save(ong);
 
