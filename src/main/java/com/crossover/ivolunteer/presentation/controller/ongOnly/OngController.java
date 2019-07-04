@@ -2,10 +2,7 @@ package com.crossover.ivolunteer.presentation.controller.ongOnly;
 
 import com.crossover.ivolunteer.business.entity.*;
 import com.crossover.ivolunteer.business.enums.TipoUsuarioEnum;
-import com.crossover.ivolunteer.business.service.EnderecoService;
-import com.crossover.ivolunteer.business.service.EventoService;
-import com.crossover.ivolunteer.business.service.OngService;
-import com.crossover.ivolunteer.business.service.UsuarioService;
+import com.crossover.ivolunteer.business.service.*;
 import com.crossover.ivolunteer.presentation.constants.ApiPaths;
 import com.crossover.ivolunteer.presentation.dto.EventoDto;
 import com.crossover.ivolunteer.presentation.dto.NovaOngDto;
@@ -20,6 +17,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Endpoints pra manipular a ONG autenticada.
@@ -45,36 +43,14 @@ public class OngController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private VoluntarioService voluntarioService;
+
     @PutMapping(ApiPaths.V1.ONG_PREFIX)
     private NovaOngDto update(@Valid @RequestBody NovaOngDto novaOngDto, HttpServletRequest request) {
         Usuario usuario = getAuthenticatedUsuarioOng(request);
 
         Ong ong = usuario.getOng();
-
-//        @NotBlank
-//        private String nome;
-//
-//        @NotBlank
-//        private String descricao;
-//
-//        private String doacoes;
-//
-//        @JsonFormat(pattern = ("MM/dd/yyyy"))
-//        private LocalDate dataFundacao;
-//
-//        private List<String> areas;
-//
-//        private String telefone;
-//
-//        private String email;
-//
-//        private String urlFacebook;
-//
-//        private String urlWebsite;
-//
-//        private EnderecoDto endereco;
-//
-//        private String imgPerfil;
 
         if (novaOngDto.getNome() != null)
             ong.setNome(novaOngDto.getNome());
@@ -158,21 +134,39 @@ public class OngController {
             eventoDto.setIdOng(ong.getId());
         }
 
-        Evento antigoEvento = eventoService.findById(id);
-        if (antigoEvento == null)
+        Evento evento = eventoService.findById(id);
+        if (evento == null)
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Couldn't find Event with specified ID");
-        if (!Objects.equals(antigoEvento.getOng().getId(), ong.getId()))
+        if (!Objects.equals(evento.getOng().getId(), ong.getId()))
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Specified Event doesn't belong to the authenticated user's Ong");
 
-        Endereco endereco = eventoDto.getLocal().toEntity();
-        endereco = enderecoService.save(endereco);
+        if (eventoDto.getNome() != null)
+            evento.setNome(eventoDto.getNome());
+        if (eventoDto.getDescricao() != null)
+            evento.setDescricao(eventoDto.getDescricao());
+        if (eventoDto.getDataCriacao() != null)
+            evento.setDataCriacao(eventoDto.getDataCriacao());
+        if (eventoDto.getDataRealizacao() != null)
+            evento.setDataRealizacao(eventoDto.getDataRealizacao());
+        if (eventoDto.getAreas() != null)
+            evento.setAreas(eventoDto.getAreas());
+        if (eventoDto.getImg() != null)
+            evento.setImg(eventoDto.getImg());
 
-        Evento evento = eventoDto.toEntity(ong, endereco);
-        evento.setId(id);
+        if (eventoDto.getLocal() != null) {
+            Endereco endereco = eventoDto.getLocal().toEntity();
+            endereco = enderecoService.save(endereco);
+            evento.setLocal(endereco);
+        }
+        if (eventoDto.getIdsVoluntariosConfirmados() != null) {
+            evento.setConfirmados(eventoDto
+                    .getIdsVoluntariosConfirmados()
+                    .stream()
+                    .map(i -> voluntarioService.findById(i))
+                    .collect(Collectors.toList()));
+        }
+
         evento = eventoService.save(evento);
-
-        ong.getEventos().add(evento);
-        ong = ongService.save(ong);
         return new EventoDto(evento);
     }
 
