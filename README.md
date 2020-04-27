@@ -7,7 +7,7 @@ Trabalho feito para disciplina de Desenvolvimento de Software para Web, do semes
 O sistema está implantado em https://ivolunteer-api.herokuapp.com/.
 
 ## Documentação
-A documentação está disponível [neste arquivo](documentacao.txt).
+A documentação está disponível [neste arquivo](endpoints.md).
 
 ## Licença
 [MIT License](LICENSE)
