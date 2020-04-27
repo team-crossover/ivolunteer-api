@@ -1,5 +1,5 @@
 # iVolunteer API
-Back-end da API Rest da plataforma [iVolunteer](https://github.com/team-crossover/ivolunteer-web).
+Back-end da API Rest da plataforma [iVolunteer](https://github.com/team-crossover/ivolunteer).
 
 Trabalho feito para disciplina de Desenvolvimento de Software para Web, do semestre 2019-1 do curso de graduação em Engenharia de Software da Universidade Federal de Goiás.
 
